@@ -13,9 +13,9 @@ public class Tweet {
 
     private String body;
     private String createdAt;
-    private User user;
+    public User user;
 
-    protected static Tweet fromJSON(JSONObject jsonObject) throws JSONException {
+    public static Tweet fromJSON(JSONObject jsonObject) throws JSONException {
         Tweet tweet = new Tweet();
         tweet.body = jsonObject.getString("text");
         tweet.createdAt = jsonObject.getString("created_at");
@@ -24,7 +24,7 @@ public class Tweet {
         return tweet;
     }
 
-    protected static List<Tweet> fromJSONArray(JSONArray jsonArray) throws JSONException{
+    public static List<Tweet> fromJSONArray(JSONArray jsonArray) throws JSONException{
         List<Tweet> tweets = new ArrayList<>();
         for(int i = 0; i < jsonArray.length(); i++){
             tweets.add(fromJSON(jsonArray.getJSONObject(i)));
@@ -33,4 +33,15 @@ public class Tweet {
         return tweets;
     }
 
+    public String getBody() {
+        return body;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public User getUser() {
+        return user;
+    }
 }
