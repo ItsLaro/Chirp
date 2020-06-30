@@ -36,7 +36,7 @@ import java.util.List;
 
 import okhttp3.Headers;
 
-public class TimelineActivity extends AppCompatActivity {
+public class TimelineActivity extends AppCompatActivity implements ComposeFragment.TweetSubmitListener {
 
     public static final String TAG = "TimelineActivity";
 
@@ -128,5 +128,12 @@ public class TimelineActivity extends AppCompatActivity {
                 return true;
         }
         return true;
+    }
+
+    @Override
+    public void sendInput(String input) {
+
+        Log.d(TAG, "Acquired tweet: " + input);
+
     }
 }
