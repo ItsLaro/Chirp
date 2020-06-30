@@ -9,6 +9,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -26,6 +28,7 @@ import com.codepath.apps.restclienttemplate.TwitterClient;
 import com.codepath.apps.restclienttemplate.databinding.FragmentComposeBinding;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
+import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONException;
 
@@ -61,8 +64,6 @@ public class ComposeFragment extends DialogFragment{
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment ComposeFragment.
      */
     // TODO: Rename and change types and number of parameters
@@ -102,7 +103,7 @@ public class ComposeFragment extends DialogFragment{
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 
 
-        //Listener on 'tweet' button for taps
+        //Listener on 'Tweet'/Submit button for taps
         binding.tweetButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -110,11 +111,14 @@ public class ComposeFragment extends DialogFragment{
                 tweetContent = binding.composeTweet.getText().toString();
 
                 if(tweetContent.isEmpty()){
-                    Toast.makeText(getActivity(), "Tweet can't be empty", Toast.LENGTH_SHORT).show();
+                    //Displays floating label error
+                    binding.composeTitleLayout.setError(getString(R.string.empty_tweet_error));
+                    binding.composeTitleLayout.setErrorEnabled(true);
                 }
                 else if(tweetContent.length() > MAX_TWEET_LENGTH){
-                    Toast.makeText(getActivity(), "Tweet can't exceed 140 characters", Toast.LENGTH_SHORT).show();
-                }
+                    //Displays floating label error
+                    binding.composeTitleLayout.setError(getString(R.string.long_tweet_error));
+                    binding.composeTitleLayout.setErrorEnabled(true);                }
                 else {
                     Toast.makeText(getActivity(), "Tweet is good!", Toast.LENGTH_SHORT).show();
                     twitterClient.postTweet(tweetContent, new JsonHttpResponseHandler() {
@@ -158,4 +162,5 @@ public class ComposeFragment extends DialogFragment{
         super.onAttach(context);
         tweetSubmitListener = (TweetSubmitListener) getActivity();
     }
+
 }

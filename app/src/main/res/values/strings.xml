@@ -10,5 +10,7 @@
     <string name="tweet_hint">What\'s happening?</string>
     <string name="tweet">Tweet</string>
     <string name="compose_title">Your tweet:</string>
+    <string name="empty_tweet_error">Tweet can\'t be empty</string>
+    <string name="long_tweet_error">tweet exceeds 140 character limit</string>
 
 </resources>

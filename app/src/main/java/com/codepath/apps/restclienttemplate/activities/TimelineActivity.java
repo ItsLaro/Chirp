@@ -38,7 +38,7 @@ import okhttp3.Headers;
 
 public class TimelineActivity extends AppCompatActivity implements ComposeFragment.TweetSubmitListener {
 
-    public static final String TAG = "TimelineActivity";
+    private static final String TAG = "TimelineActivity";
 
     Menu mainMenu;
     TwitterClient client;

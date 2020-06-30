@@ -1,6 +1,7 @@
 package com.codepath.apps.restclienttemplate.utilities;
 
 import android.text.format.DateUtils;
+import android.util.Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -22,6 +23,8 @@ public class DateUtility {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
+        Log.d("DateUtility", relativeDate);
 
         String words[] = relativeDate.split(" ", 3);
         trimmedDated = words[0] + words[1].substring(0, 1);
