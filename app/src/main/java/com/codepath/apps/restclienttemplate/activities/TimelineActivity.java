@@ -123,7 +123,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
 
                 //Launches fragment
                 FragmentManager fm = getSupportFragmentManager();
-                ComposeFragment editNameDialogFragment = ComposeFragment.newInstance("Some Title", "Nothing");
+                ComposeFragment editNameDialogFragment = ComposeFragment.newInstance("");
                 editNameDialogFragment.show(fm, "Compose");
                 Log.d(TAG, "Compose initiated.");
                 return true;

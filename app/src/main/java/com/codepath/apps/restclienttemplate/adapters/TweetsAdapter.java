@@ -11,6 +11,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DecodeFormat;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.codepath.apps.restclienttemplate.databinding.ItemTweetBinding;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.apps.restclienttemplate.utilities.DateUtility;
@@ -84,8 +89,28 @@ public class TweetsAdapter extends  RecyclerView.Adapter<TweetsAdapter.ViewHolde
 
             Glide.with(context)
                     .load(tweet.user.getProfileImageUrl())
+                    .apply(new RequestOptions()
+                    .fitCenter()
+                    .format(DecodeFormat.PREFER_ARGB_8888)
+                    .override(Target.SIZE_ORIGINAL))
+                    .transform(new CircleCrop())
                     .into(binding.profileImage);
 
+            if(tweet.getMediaUrls().size() > 0){
+                //Set media
+                Glide.with(context)
+                        .load(tweet.getMediaUrl(0))
+                        .apply(new RequestOptions()
+                        .override(Target.SIZE_ORIGINAL))
+                        .transform(new RoundedCorners(20))
+                        .into(binding.tweetMedia);
+
+                //Recovers visibility on a recycled item after it had been toggled off
+                binding.tweetMedia.setVisibility(View.VISIBLE);
+            }
+            else{
+                binding.tweetMedia.setVisibility(View.GONE);
+            }
         }
     }
 }

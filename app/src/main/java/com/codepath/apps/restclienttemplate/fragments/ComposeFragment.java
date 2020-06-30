@@ -67,7 +67,7 @@ public class ComposeFragment extends DialogFragment{
      * @return A new instance of fragment ComposeFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ComposeFragment newInstance(String param1, String param2) {
+    public static ComposeFragment newInstance(String param1) {
         ComposeFragment fragment = new ComposeFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
