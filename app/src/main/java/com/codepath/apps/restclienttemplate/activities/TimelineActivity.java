@@ -44,11 +44,12 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
     TwitterClient client;
     TweetsAdapter tweetsAdapter;
     List<Tweet> tweets = new ArrayList<>();
+    ActivityTimelineBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final ActivityTimelineBinding binding = ActivityTimelineBinding.inflate(getLayoutInflater());
+        binding = ActivityTimelineBinding.inflate(getLayoutInflater());
         View timelineView = binding.getRoot();
         setContentView(timelineView);
 
@@ -136,7 +137,8 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
         Log.d(TAG, "Acquired tweet: " + postedTweet.getBody());
 
         tweets.add(0, postedTweet);
-        tweetsAdapter.notifyDataSetChanged();
+        tweetsAdapter.notifyItemInserted(0);
+        binding.timelineRecycleView.smoothScrollToPosition(0);
 
     }
 }
