@@ -2,7 +2,7 @@
 
 **Hoot-hoot** is an android app that allows a user to view their Twitter timeline and post a new tweet. The app utilizes [Twitter REST API](https://dev.twitter.com/rest/public).
 
-Time spent: **3** hours spent in total
+Time spent: **4** hours spent in total
 
 ## User Stories
 
@@ -18,7 +18,7 @@ The following **required** functionality is completed:
   * [ ] User is taken back to home timeline with **new tweet visible** in timeline
   * [ ] Newly created tweet should be manually inserted into the timeline and not rely on a full refresh
 * [ ] User can **see a counter with total number of characters left for tweet** on compose tweet page
-* [ ] User can **pull down to refresh tweets timeline**
+* [x] User can **pull down to refresh tweets timeline**
 * [ ] User can **see embedded image media within a tweet** on list or detail view.
 
 The following **stretch** features are implemented:

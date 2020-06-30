@@ -3,6 +3,7 @@ package com.codepath.apps.restclienttemplate.activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.graphics.Movie;
 import android.os.Bundle;
@@ -36,7 +37,7 @@ public class TimelineActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityTimelineBinding binding = ActivityTimelineBinding.inflate(getLayoutInflater());
+        final ActivityTimelineBinding binding = ActivityTimelineBinding.inflate(getLayoutInflater());
         View timelineView = binding.getRoot();
         setContentView(timelineView);
 
@@ -47,6 +48,24 @@ public class TimelineActivity extends AppCompatActivity {
         binding.timelineRecycleView.setAdapter(tweetsAdapter);
 
         populateHomeTimeline();
+
+
+        binding.swipeRefreshContainer.setColorSchemeResources(
+                android.R.color.holo_blue_bright,
+                android.R.color.holo_blue_dark);
+
+        binding.swipeRefreshContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Log.d(TAG, "Refresh: Fetching fresh data!");
+
+                //Clears and repopulates
+                populateHomeTimeline();
+
+                //Turn off the reload signal
+                binding.swipeRefreshContainer.setRefreshing(false);
+            }
+        });
     }
 
     private void populateHomeTimeline() {
@@ -57,8 +76,8 @@ public class TimelineActivity extends AppCompatActivity {
                 Log.d(TAG, statusCode + ", Success: " + json.toString());
                 JSONArray jsonArray = json.jsonArray;
                 try {
-                    tweets.addAll(Tweet.fromJSONArray(jsonArray));
-                    tweetsAdapter.notifyDataSetChanged();
+                    tweetsAdapter.clear();
+                    tweetsAdapter.addAll(Tweet.fromJSONArray(jsonArray));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
