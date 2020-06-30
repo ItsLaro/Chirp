@@ -49,7 +49,7 @@ public class ComposeFragment extends DialogFragment{
 
     //Interface to be used as callback to get tweet content from fragment
     public interface TweetSubmitListener{
-        void sendInput(String input);
+        void sendInput(Tweet submittedTweet);
     }
     public TweetSubmitListener tweetSubmitListener;
 
@@ -124,13 +124,18 @@ public class ComposeFragment extends DialogFragment{
                             Log.d(TAG, "Success: POSTED " + json.toString());
 
                             try {
-                                Tweet newTweet = Tweet.fromJSON(json.jsonObject);
-                                Log.d(TAG, "Published Tweet: " + newTweet);
-                            } catch (JSONException e) {
-                                Log.e(TAG, "Error parsing JSON: " + e);
-                            }
-                            tweetSubmitListener.sendInput(tweetContent); //interface captures the input
 
+                                Tweet newTweet = Tweet.fromJSON(json.jsonObject);
+                                Log.d(TAG, "Published Tweet: " + newTweet.getBody());
+
+                                //interface captures the input & sends back to the activity
+                                tweetSubmitListener.sendInput(newTweet);
+
+                            } catch (JSONException e) {
+
+                                Log.e(TAG, "Error parsing JSON: " + e);
+
+                            }
                             getDialog().dismiss(); //Dismisses tweet-composing fragment
                         }
 

@@ -131,9 +131,12 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
     }
 
     @Override
-    public void sendInput(String input) {
+    public void sendInput(Tweet postedTweet) {
 
-        Log.d(TAG, "Acquired tweet: " + input);
+        Log.d(TAG, "Acquired tweet: " + postedTweet.getBody());
+
+        tweets.add(0, postedTweet);
+        tweetsAdapter.notifyDataSetChanged();
 
     }
 }
