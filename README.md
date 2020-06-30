@@ -11,7 +11,7 @@ The following **required** functionality is completed:
 * [x]	User can **sign in to Twitter** using OAuth login
 * [x]	User can **view tweets from their home timeline**
   * [x] User is displayed the username, name, and body for each tweet
-  * [ ] User is displayed the [relative timestamp](https://gist.github.com/nesquena/f786232f5ef72f6e10a7) for each tweet "8m", "7h"
+  * [x] User is displayed the [relative timestamp](https://gist.github.com/nesquena/f786232f5ef72f6e10a7) for each tweet "8m", "7h"
 * [ ] User can **compose and post a new tweet**
   * [ ] User can click a “Compose” icon in the Action Bar on the top right
   * [ ] User can then enter a new tweet and post this to twitter
@@ -71,8 +71,8 @@ Describe any challenges encountered while building the app.
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
-    
-    
+
+
 
 # RestClientTemplate [![Build Status](https://travis-ci.org/codepath/android-rest-client-template.svg?branch=master)](https://travis-ci.org/codepath/android-rest-client-template)
 
@@ -99,7 +99,7 @@ The following libraries are used to make this possible:
 ### 1. Configure the REST client
 
 Open `src/com.codepath.apps.restclienttemplate/RestClient.java`. Configure the `REST_API_INSTANCE` and`REST_URL`.
- 
+
 For example if I wanted to connect to Twitter:
 
 ```java
@@ -230,7 +230,7 @@ public class User {
 
     // normally this field would be annotated @PrimaryKey because this is an embedded object
     // it is not needed
-    @ColumnInfo  
+    @ColumnInfo
     Long twitter_id;
 }
 ```
@@ -295,7 +295,7 @@ Now you have a model that supports proper creation based on JSON. Create models 
 
 ### 4. Define your queries
 
-Next, you will need to define the queries by creating a Data Access Object (DAO) class.   Here is an example of declaring queries to return a Tweet by the post ID, retrieve the most recent tweets, and insert tweets.   
+Next, you will need to define the queries by creating a Data Access Object (DAO) class.   Here is an example of declaring queries to return a Tweet by the post ID, retrieve the most recent tweets, and insert tweets.
 
 ```java
 
@@ -338,7 +338,7 @@ public abstract class MyDatabase extends RoomDatabase {
   // Database name to be used
   public static final String NAME = "MyDataBase";
 
-```    
+```
 
 When compiling the code, the schemas will be stored in a `schemas/` directory assuming this statement
 has been included your `app/build.gradle` file.  These schemas should be checked into your code based.
@@ -476,7 +476,7 @@ public static final String REST_URL = "https://www.googleapis.com/calendar/v3"; 
 
 The consumer and secret keys should be retrieved via [the credentials section](https://console.developers.google.com/apis/credentials) in the Google developer console  You will need to create an OAuth2 client ID and client secret.
 
-Create a file called `apikey.properties`: 
+Create a file called `apikey.properties`:
 
 ```java
 REST_CONSUMER_KEY="XXX-XXX.apps.googleusercontent.com"
@@ -508,12 +508,12 @@ Google only accepts `http://` or `https://` domains, so your `REST_CALLBACK_URL_
 public static final String REST_CALLBACK_URL_TEMPLATE = "https://localhost";
 ```
 
-Make sure to update the `cprest` and `intent_host` to match this callback URL . 
+Make sure to update the `cprest` and `intent_host` to match this callback URL .
 
 ### Troubleshooting
 
 * If you receive the following error `org.scribe.exceptions.OAuthException: Cannot send unauthenticated requests for TwitterApi client. Please attach an access token!` then check the following:
  * Is your intent-filter with `<data>` attached to the `LoginActivity`? If not, make sure that the `LoginActivity` receives the request after OAuth authorization.
  * Is the `onLoginSuccess` method being executed in the `LoginActivity`. On launch of your app, be sure to start the app on the LoginActivity so authentication routines execute on launch and take you to the authenticated activity.
- * If you are plan to test with Android API 24 or above, you will need to use Chrome to launch the OAuth flow.  
+ * If you are plan to test with Android API 24 or above, you will need to use Chrome to launch the OAuth flow.
  * Note that the emulators (both the Google-provided x86 and Genymotion versions) for API 24+ versions can introduce intermittent issues when initiating the OAuth flow for the first time.  For best results, use an device for this project.
