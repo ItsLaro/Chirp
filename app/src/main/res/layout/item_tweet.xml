@@ -2,7 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent" android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/tweet_background">
 
     <ImageView
         android:id="@+id/profileImage"
@@ -38,7 +40,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_alignEnd="@+id/tweetBody"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="16dp"
         android:layout_marginTop="8dp"
         tools:text="5h" />
 
@@ -59,7 +62,7 @@
         android:layout_width="wrap_content"
         android:layout_height="200dp"
         android:layout_below="@id/tweetBody"
-        android:scaleType="fitCenter"
+        android:scaleType="centerInside"
         android:layout_marginBottom="32dp"
         android:layout_marginEnd="16dp"
         android:layout_alignStart="@+id/tweetBody"
