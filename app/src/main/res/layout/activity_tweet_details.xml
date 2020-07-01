@@ -144,7 +144,7 @@
                 android:id="@+id/actionRT"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_vector_retweet"
+                android:src="@drawable/state_list_retweet"
                 android:layout_marginVertical="8dp"
                 android:layout_weight="1"
                 android:background="#00000000" />
@@ -152,7 +152,7 @@
                 android:id="@+id/actionFavorite"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_vector_heart"
+                android:src="@drawable/state_list_heart"
                 android:layout_marginVertical="8dp"
                 android:layout_weight="1"
                 android:background="#00000000" />

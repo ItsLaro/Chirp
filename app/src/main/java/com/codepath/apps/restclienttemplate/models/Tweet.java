@@ -24,6 +24,11 @@ public class Tweet {
     String createdAt;
     public User user;
 
+    int retweetCount;
+    int favoriteCount;
+    boolean isFavorited;
+    boolean isRetweet;
+
     @Transient
     JSONObject entities;
 
@@ -45,6 +50,22 @@ public class Tweet {
         return createdAt;
     }
 
+    public int getRetweetCount() {
+        return retweetCount;
+    }
+
+    public int getFavoriteCount() {
+        return favoriteCount;
+    }
+
+    public boolean isFavorited() {
+        return isFavorited;
+    }
+
+    public boolean isRetweet() {
+        return isRetweet;
+    }
+
     public List<String> getMediaUrls() {
         return mediaUrls;
     }
@@ -62,6 +83,11 @@ public class Tweet {
         tweet.body = jsonObject.getString("text");
         tweet.createdAt = jsonObject.getString("created_at");
         tweet.user = User.fromJSON(jsonObject.getJSONObject("user"));
+
+        tweet.retweetCount = jsonObject.getInt("retweet_count");
+        tweet.favoriteCount = jsonObject.getInt("favorite_count");
+        tweet.isFavorited = jsonObject.getBoolean("favorited");
+        tweet.isRetweet = jsonObject.getBoolean("retweeted");
 
         tweet.entities = jsonObject.getJSONObject("entities");
         if(tweet.entities.has("media")){

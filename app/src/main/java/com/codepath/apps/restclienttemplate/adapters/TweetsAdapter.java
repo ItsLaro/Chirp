@@ -97,6 +97,14 @@ public class TweetsAdapter extends  RecyclerView.Adapter<TweetsAdapter.ViewHolde
             binding.userHandle.setText(tweet.user.getScreenName());
             binding.tweetBody.setText(tweet.getBody());
 
+            if(tweet.isFavorited()){
+                binding.actionFavorite.setSelected(true);
+            }
+
+            if(tweet.isRetweet()){
+                binding.actionRT.setSelected(true);
+            }
+
             Glide.with(context)
                     .load(tweet.user.getProfileImageUrl())
                     .transform(new CircleCrop())
@@ -119,7 +127,6 @@ public class TweetsAdapter extends  RecyclerView.Adapter<TweetsAdapter.ViewHolde
             }
 
             //Listeners
-
             binding.tweetItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

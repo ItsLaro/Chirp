@@ -45,6 +45,13 @@ public class TweetDetailsActivity extends AppCompatActivity {
         binding.tweetBody.setText(tweet.getBody());
         binding.timestamp.setText(tweet.getCreatedAt());
 
+        if(tweet.isFavorited()){
+            binding.actionFavorite.setSelected(true);
+        }
+
+        if(tweet.isRetweet()){
+            binding.actionRT.setSelected(true);
+        }
         //Media
         Glide.with(this)
                 .load(tweet.user.getProfileImageUrl())
