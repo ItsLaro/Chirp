@@ -32,18 +32,20 @@ public class TweetDetailsActivity extends AppCompatActivity {
         binding = ActivityTweetDetailsBinding.inflate(getLayoutInflater());
         View timelineView = binding.getRoot();
         setContentView(timelineView);
+        setTitle(R.string.tweet_details_title);
 
-        //Views are assigned with tweet data passed with the intent
-
+        //Getting parcel from last Activity
         tweet = Parcels.unwrap(getIntent().getParcelableExtra("tweet_object"));
-
         Log.d(TAG, "Loaded details for tweet: " + tweet.getBody());
 
+
+        //Setting views to passed Tweet data
         binding.displayName.setText(tweet.user.getName());
         binding.userHandle.setText(tweet.user.getScreenName());
         binding.tweetBody.setText(tweet.getBody());
         binding.timestamp.setText(tweet.getCreatedAt());
 
+        //Media
         Glide.with(this)
                 .load(tweet.user.getProfileImageUrl())
                 .transform(new CircleCrop())
@@ -65,5 +67,34 @@ public class TweetDetailsActivity extends AppCompatActivity {
             //No image? Hide the view.
             binding.tweetMedia.setVisibility(View.GONE);
         }
+
+        //Setting onClickListeners for tweet actions in the action pane
+        binding.actionComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "Reply clicked on tweet: " + tweet.getBody());
+            }
+        });
+
+        binding.actionRT.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "RT clicked on tweet: " + tweet.getBody());
+            }
+        });
+
+        binding.actionFavorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "Favorite clicked on tweet: " + tweet.getBody());
+            }
+        });
+
+        binding.actionShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "Share clicked on tweet: " + tweet.getBody());
+            }
+        });
     }
 }

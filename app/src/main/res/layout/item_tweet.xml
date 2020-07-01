@@ -7,68 +7,119 @@
     android:id="@+id/tweetContainer"
     android:background="@drawable/tweet_background">
 
-    <ImageView
-        android:id="@+id/profileImage"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_margin = "8dp"
-        tools:srcCompat="@tools:sample/avatars" />
-
-    <TextView
-        android:id="@+id/displayName"
-        android:layout_alignTop="@+id/profileImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_toEndOf="@+id/profileImage"
-        tools:text="Ivan A. Reyes"
-        android:textStyle="bold"
-        android:textColor="@color/colorBlack"/>
-
-    <TextView
-        android:id="@+id/userHandle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="8dp"
-        android:layout_toEndOf="@+id/displayName"
-        tools:text=" &#64;ItsLaro"
-        android:textColor="@android:color/darker_gray"/>
-
-    <TextView
-        android:id="@+id/timestamp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="8dp"
-        tools:text="5h" />
-
-    <TextView
-        android:id="@+id/tweetBody"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/displayName"
-        android:layout_toEndOf="@+id/profileImage"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
-        tools:text="@tools:sample/lorem[20]"
-        android:textColor="@color/colorBlack"/>
-
-    <ImageView
-        android:id="@+id/tweetMedia"
-        android:layout_toEndOf="@+id/profileImage"
+    <RelativeLayout
+        android:id="@+id/tweetItem"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_below="@id/tweetBody"
-        android:scaleType="fitXY"
-        android:layout_marginBottom="32dp"
-        android:layout_marginEnd="16dp"
-        android:layout_alignStart="@+id/tweetBody"
-        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/profileImage"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_margin = "8dp"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/displayName"
+            android:layout_alignTop="@+id/profileImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@+id/profileImage"
+            tools:text="Ivan A. Reyes"
+            android:textStyle="bold"
+            android:textColor="@color/colorBlack"/>
+
+        <TextView
+            android:id="@+id/userHandle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="8dp"
+            android:layout_toEndOf="@+id/displayName"
+            tools:text=" &#64;ItsLaro"
+            android:textColor="@android:color/darker_gray"/>
+
+        <TextView
+            android:id="@+id/timestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp"
+            tools:text="5h" />
+
+        <TextView
+            android:id="@+id/tweetBody"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/displayName"
+            android:layout_toEndOf="@+id/profileImage"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            tools:text="@tools:sample/lorem[20]"
+            android:textColor="@color/colorBlack"/>
+
+        <ImageView
+            android:id="@+id/tweetMedia"
+            android:layout_toEndOf="@+id/profileImage"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_below="@id/tweetBody"
+            android:scaleType="fitXY"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_alignStart="@+id/tweetBody"
+            tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/actionsContainer"
+        android:orientation="horizontal"
+        android:layout_marginStart="58dp"
+        android:gravity="center"
+        android:layout_below="@id/tweetItem">
+
+        <ImageButton
+            android:id="@+id/actionComment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_vector_reply"
+            android:layout_marginVertical="8dp"
+            android:background="#00000000"
+            android:layout_weight="1"/>
+        <ImageButton
+            android:id="@+id/actionRT"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_vector_retweet"
+            android:layout_marginVertical="8dp"
+            android:layout_weight="1"
+            android:background="#00000000" />
+        <ImageButton
+            android:id="@+id/actionFavorite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_vector_heart"
+            android:layout_marginVertical="8dp"
+            android:layout_weight="1"
+            android:background="#00000000" />
+        <ImageButton
+            android:id="@+id/actionShare"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_vector_share"
+            android:layout_marginVertical="8dp"
+            android:layout_weight="1"
+            android:background="#00000000" />
+
+    </LinearLayout>
 
 </RelativeLayout>

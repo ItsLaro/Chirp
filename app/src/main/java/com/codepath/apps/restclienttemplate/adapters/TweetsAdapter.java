@@ -118,9 +118,13 @@ public class TweetsAdapter extends  RecyclerView.Adapter<TweetsAdapter.ViewHolde
                 binding.tweetMedia.setVisibility(View.GONE);
             }
 
-            binding.tweetContainer.setOnClickListener(new View.OnClickListener() {
+            //Listeners
+
+            binding.tweetItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    /*Sets listener on actual tweet item -> get position
+                    and initiate detail-activity from timeline*/
                     clickListener.onItemClick(getAdapterPosition());
                 }
             });
