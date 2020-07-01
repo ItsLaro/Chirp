@@ -13,7 +13,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.CenterInside;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.load.resource.bitmap.FitCenter;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
@@ -29,10 +31,16 @@ public class TweetsAdapter extends  RecyclerView.Adapter<TweetsAdapter.ViewHolde
 
     Context context;
     List<Tweet> tweets;
+    OnClickListener clickListener;
 
-    public TweetsAdapter(Context context, List<Tweet> tweets) {
+    public interface  OnClickListener{
+        void onItemClick(int position);
+    }
+
+    public TweetsAdapter(Context context, List<Tweet> tweets, OnClickListener clickListener) {
         this.context = context;
         this.tweets = tweets;
+        this.clickListener = clickListener;
     }
 
     @NonNull
@@ -76,9 +84,9 @@ public class TweetsAdapter extends  RecyclerView.Adapter<TweetsAdapter.ViewHolde
 
         public void bind(Tweet tweet) {
 
-
             String timeStamp = DateUtility.getRelativeTimeAgo(tweet.getCreatedAt());
             Log.d(TAG, "New tweet's timeStamp " + timeStamp);
+
             if(timeStamp.equals("In0") || timeStamp.equals("In1")){
                 //Condition handles case when tweet is manually inserted (without refreshing)
                 timeStamp = "Just now";
@@ -94,6 +102,7 @@ public class TweetsAdapter extends  RecyclerView.Adapter<TweetsAdapter.ViewHolde
                     .transform(new CircleCrop())
                     .into(binding.profileImage);
 
+            //If there's an image
             if(tweet.getMediaUrls().size() > 0){
                 //Set media
                 Glide.with(context)
@@ -105,8 +114,16 @@ public class TweetsAdapter extends  RecyclerView.Adapter<TweetsAdapter.ViewHolde
                 binding.tweetMedia.setVisibility(View.VISIBLE);
             }
             else{
+                //No image? Hide the view.
                 binding.tweetMedia.setVisibility(View.GONE);
             }
+
+            binding.tweetContainer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    clickListener.onItemClick(getAdapterPosition());
+                }
+            });
         }
     }
 }

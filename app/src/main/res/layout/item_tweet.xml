@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:id="@+id/tweetContainer"
     android:background="@drawable/tweet_background">
 
     <ImageView
@@ -23,7 +24,8 @@
         android:layout_marginStart="8dp"
         android:layout_toEndOf="@+id/profileImage"
         tools:text="Ivan A. Reyes"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        android:textColor="@color/colorBlack"/>
 
     <TextView
         android:id="@+id/userHandle"
@@ -54,19 +56,19 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
-        tools:text="@tools:sample/lorem[20]" />
+        tools:text="@tools:sample/lorem[20]"
+        android:textColor="@color/colorBlack"/>
 
     <ImageView
         android:id="@+id/tweetMedia"
         android:layout_toEndOf="@+id/profileImage"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_below="@id/tweetBody"
-        android:scaleType="centerInside"
+        android:scaleType="fitXY"
         android:layout_marginBottom="32dp"
         android:layout_marginEnd="16dp"
         android:layout_alignStart="@+id/tweetBody"
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
-
 
 </RelativeLayout>

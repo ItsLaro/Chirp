@@ -10,6 +10,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.content.Intent;
 import android.graphics.Movie;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -29,6 +30,7 @@ import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,15 +43,15 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
 
     private static final String TAG = "TimelineActivity";
 
-    Menu mainMenu;
-    ActivityTimelineBinding binding;
+    private Menu mainMenu;
+    private ActivityTimelineBinding binding;
 
-    TwitterClient client;
-    TweetsAdapter tweetsAdapter;
-    List<Tweet> tweets = new ArrayList<>();
+    private TwitterClient client;
+    private TweetsAdapter tweetsAdapter;
+    private List<Tweet> tweets = new ArrayList<>();
 
-    EndlessRecyclerViewScrollListener scrollListener;
-    LinearLayoutManager layoutManager;
+    private EndlessRecyclerViewScrollListener scrollListener;
+    private LinearLayoutManager layoutManager;
 
 
     @Override
@@ -63,7 +65,20 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
         client = TwitterApp.getRestClient(this);
 
         //Adapter
-        tweetsAdapter = new TweetsAdapter(this, tweets);
+        TweetsAdapter.OnClickListener onClickListener = new TweetsAdapter.OnClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                Intent tweetDetailsIntent = new Intent(TimelineActivity.this, TweetDetailsActivity.class);
+
+                //Passing data to the intent
+                tweetDetailsIntent.putExtra("tweet_position", position);
+                tweetDetailsIntent.putExtra("tweet_object", Parcels.wrap(tweets.get(position)));
+
+                startActivity(tweetDetailsIntent);
+            }
+        };
+
+        tweetsAdapter = new TweetsAdapter(this, tweets, onClickListener);
         layoutManager = new LinearLayoutManager(this);
         binding.timelineRecycleView.setLayoutManager(layoutManager);
         binding.timelineRecycleView.setAdapter(tweetsAdapter);
@@ -89,7 +104,6 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
         });
 
         //Infinite scroll listener
-
         scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
