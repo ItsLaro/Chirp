@@ -100,9 +100,15 @@ public class TweetsAdapter extends  RecyclerView.Adapter<TweetsAdapter.ViewHolde
             if(tweet.isFavorited()){
                 binding.actionFavorite.setSelected(true);
             }
+            else{
+                binding.actionFavorite.setSelected(false);
+            }
 
             if(tweet.isRetweet()){
                 binding.actionRT.setSelected(true);
+            }
+            else{
+                binding.actionRT.setSelected(false);
             }
 
             Glide.with(context)

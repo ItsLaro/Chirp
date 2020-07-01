@@ -38,6 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginTop="8dp"
+            android:layout_marginStart="2dp"
             android:layout_toEndOf="@+id/displayName"
             tools:text=" &#64;ItsLaro"
             android:textColor="@android:color/darker_gray"/>

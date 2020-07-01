@@ -62,8 +62,16 @@ public class Tweet {
         return isFavorited;
     }
 
+    public void toggleFavorited(){
+        isFavorited = isFavorited ? false : true;
+    }
+
     public boolean isRetweet() {
         return isRetweet;
+    }
+
+    public void toggleRetweeted(){
+        isRetweet = isRetweet ? false : true;
     }
 
     public List<String> getMediaUrls() {
@@ -94,7 +102,8 @@ public class Tweet {
 
             JSONArray mediaEntities = tweet.entities.getJSONArray("media");
 
-            //Only the first photo is listed in the entities section. TODO: How to acquire the rest?
+            /*Only the first photo is listed in the entities section.
+            TODO: How to acquire the rest? Bonus Feature: show all embedded media*/
             for(int i = 0; i < mediaEntities.length(); i++){
                 tweet.mediaUrls.add(mediaEntities.getJSONObject(i).getString("media_url_https"));
             }
@@ -102,6 +111,7 @@ public class Tweet {
             Log.i("TweetMedia", "Media! Found: " + tweet.mediaUrls.toString());
 
         }else{
+
             Log.i("TweetMedia", "No media on tweet");
 
         }
