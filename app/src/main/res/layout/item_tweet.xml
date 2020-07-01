@@ -10,9 +10,7 @@
         android:layout_height="50dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="5dp"
+        android:layout_margin = "8dp"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
@@ -20,8 +18,7 @@
         android:layout_alignTop="@+id/profileImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="5dp"
+        android:layout_marginStart="8dp"
         android:layout_toEndOf="@+id/profileImage"
         tools:text="Ivan A. Reyes"
         android:textStyle="bold"/>
@@ -31,7 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="8dp"
         android:layout_toEndOf="@+id/displayName"
         tools:text=" &#64;ItsLaro"
         android:textColor="@android:color/darker_gray"/>
@@ -41,9 +38,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_alignEnd="@+id/tweetMedia"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="5dp"
+        android:layout_alignEnd="@+id/tweetBody"
+        android:layout_marginTop="8dp"
         tools:text="5h" />
 
     <TextView
@@ -52,9 +48,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/displayName"
         android:layout_toEndOf="@+id/profileImage"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
         tools:text="@tools:sample/lorem[20]" />
 
     <ImageView
@@ -64,7 +60,9 @@
         android:layout_height="200dp"
         android:layout_below="@id/tweetBody"
         android:scaleType="fitCenter"
-        android:layout_margin="10dp"
+        android:layout_marginBottom="32dp"
+        android:layout_marginEnd="16dp"
+        android:layout_alignStart="@+id/tweetBody"
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
 

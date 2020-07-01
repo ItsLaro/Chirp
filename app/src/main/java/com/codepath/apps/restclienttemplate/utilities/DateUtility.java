@@ -27,7 +27,12 @@ public class DateUtility {
         Log.d("DateUtility", relativeDate);
 
         String words[] = relativeDate.split(" ", 3);
-        trimmedDated = words[0] + words[1].substring(0, 1);
+        try {
+            trimmedDated = words[0] + words[1].substring(0, 1);
+        }
+        catch (ArrayIndexOutOfBoundsException e){
+            trimmedDated = relativeDate;
+        }
 
         return trimmedDated;
     }

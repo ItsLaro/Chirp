@@ -24,6 +24,7 @@ import com.codepath.apps.restclienttemplate.adapters.TweetsAdapter;
 import com.codepath.apps.restclienttemplate.databinding.ActivityTimelineBinding;
 import com.codepath.apps.restclienttemplate.fragments.ComposeFragment;
 import com.codepath.apps.restclienttemplate.models.Tweet;
+import com.codepath.apps.restclienttemplate.utilities.EndlessRecyclerViewScrollListener;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
@@ -41,10 +42,15 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
     private static final String TAG = "TimelineActivity";
 
     Menu mainMenu;
+    ActivityTimelineBinding binding;
+
     TwitterClient client;
     TweetsAdapter tweetsAdapter;
     List<Tweet> tweets = new ArrayList<>();
-    ActivityTimelineBinding binding;
+
+    EndlessRecyclerViewScrollListener scrollListener;
+    LinearLayoutManager layoutManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,15 +59,18 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
         View timelineView = binding.getRoot();
         setContentView(timelineView);
 
+        //Client
         client = TwitterApp.getRestClient(this);
-        tweetsAdapter = new TweetsAdapter(this, tweets);
 
-        binding.timelineRecycleView.setLayoutManager(new LinearLayoutManager(this));
+        //Adapter
+        tweetsAdapter = new TweetsAdapter(this, tweets);
+        layoutManager = new LinearLayoutManager(this);
+        binding.timelineRecycleView.setLayoutManager(layoutManager);
         binding.timelineRecycleView.setAdapter(tweetsAdapter);
 
         populateHomeTimeline();
 
-
+        //Swipe Refresh Listener
         binding.swipeRefreshContainer.setColorSchemeResources(
                 android.R.color.holo_blue_bright,
                 android.R.color.holo_blue_dark);
@@ -78,6 +87,20 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
                 binding.swipeRefreshContainer.setRefreshing(false);
             }
         });
+
+        //Infinite scroll listener
+
+        scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                Log.d(TAG, "User tried to load more from page: " + page);
+                loadMore();
+            }
+        };
+
+        //ScrollListener attached to RecyclerView
+        binding.timelineRecycleView.addOnScrollListener(scrollListener);
+
     }
 
     private void populateHomeTimeline() {
@@ -100,6 +123,31 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
                 Log.d(TAG, statusCode + ", Failure:" + response + "; Error: " + e);
             }
         });
+    }
+
+    private void loadMore() {
+
+        client.getNextPageOfTweets(new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                Log.d(TAG, "Last ID: " + tweets.get(tweets.size()-1).getId());
+                Log.d(TAG, statusCode + ", Success: " + json.toString());
+                JSONArray jsonArray = json.jsonArray;
+
+                try {
+                    tweetsAdapter.addAll(Tweet.fromJSONArray(jsonArray));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+
+            }
+
+        }, tweets.get(tweets.size()-1).getId());
+
     }
 
     @Override
