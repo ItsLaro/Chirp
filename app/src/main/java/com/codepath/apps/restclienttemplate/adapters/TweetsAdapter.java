@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DecodeFormat;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
@@ -84,15 +85,12 @@ public class TweetsAdapter extends  RecyclerView.Adapter<TweetsAdapter.ViewHolde
             }
 
             binding.timestamp.setText(timeStamp);
-            binding.displayName.setText(tweet.user.getScreenName());
+            binding.displayName.setText(tweet.user.getName());
+            binding.userHandle.setText(tweet.user.getScreenName());
             binding.tweetBody.setText(tweet.getBody());
 
             Glide.with(context)
                     .load(tweet.user.getProfileImageUrl())
-                    .apply(new RequestOptions()
-                    .fitCenter()
-                    .format(DecodeFormat.PREFER_ARGB_8888)
-                    .override(Target.SIZE_ORIGINAL))
                     .transform(new CircleCrop())
                     .into(binding.profileImage);
 
@@ -100,9 +98,7 @@ public class TweetsAdapter extends  RecyclerView.Adapter<TweetsAdapter.ViewHolde
                 //Set media
                 Glide.with(context)
                         .load(tweet.getMediaUrl(0))
-                        .apply(new RequestOptions()
-                        .override(Target.SIZE_ORIGINAL))
-                        .transform(new RoundedCorners(20))
+                        .transform(new CenterCrop(), new RoundedCorners(30))
                         .into(binding.tweetMedia);
 
                 //Recovers visibility on a recycled item after it had been toggled off

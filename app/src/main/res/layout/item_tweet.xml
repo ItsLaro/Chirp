@@ -11,26 +11,37 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="5dp"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
         android:id="@+id/displayName"
+        android:layout_alignTop="@+id/profileImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="5dp"
+        android:layout_toEndOf="@+id/profileImage"
+        tools:text="Ivan A. Reyes"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/userHandle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_toEndOf="@+id/profileImage"
-        tools:text="ItsLaro" />
+        android:layout_marginTop="15dp"
+        android:layout_toEndOf="@+id/displayName"
+        tools:text=" &#64;ItsLaro"
+        android:textColor="@android:color/darker_gray"/>
 
     <TextView
         android:id="@+id/timestamp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
+        android:layout_alignEnd="@+id/tweetMedia"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="5dp"
         tools:text="5h" />
@@ -40,18 +51,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/displayName"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
         android:layout_toEndOf="@+id/profileImage"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
         tools:text="@tools:sample/lorem[20]" />
 
     <ImageView
         android:id="@+id/tweetMedia"
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_alignStart="@+id/tweetBody"
+        android:layout_toEndOf="@+id/profileImage"
+        android:layout_width="wrap_content"
+        android:layout_height="200dp"
         android:layout_below="@id/tweetBody"
-        tools:srcCompat="@tools:sample/backgrounds/scenic"/>
+        android:scaleType="fitCenter"
+        android:layout_margin="10dp"
+        tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
 
 </RelativeLayout>
