@@ -56,6 +56,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignStart="@+id/tweetBody"
+                android:layout_marginVertical="16dp"
                 android:paddingVertical="8dp"
                 android:layout_below="@+id/tweetBody"
                 tools:text="5:16 PM, 30 Jun 20" />
@@ -94,6 +95,7 @@
             android:id="@+id/statsContainer"
             android:orientation="horizontal"
             android:background="@drawable/tweet_background"
+            android:paddingVertical="8dp"
             android:gravity="left">
 
             <TextView

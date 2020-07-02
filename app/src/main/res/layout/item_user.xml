@@ -47,7 +47,7 @@
             android:textColor="@android:color/darker_gray"/>
 
 
-        <TextView
+        <com.codepath.apps.restclienttemplate.utilities.LinkifiedTextView
             android:id="@+id/userBio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

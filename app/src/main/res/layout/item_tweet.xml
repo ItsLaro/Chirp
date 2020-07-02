@@ -53,7 +53,7 @@
             android:layout_marginTop="8dp"
             tools:text="5h" />
 
-        <TextView
+        <com.codepath.apps.restclienttemplate.utilities.LinkifiedTextView
             android:id="@+id/tweetBody"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
