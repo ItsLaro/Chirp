@@ -16,6 +16,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.codepath.apps.restclienttemplate.R;
@@ -44,12 +46,14 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
     private static final String TAG = "TimelineActivity";
 
     private Menu mainMenu;
+    private ProgressBar progressBarFooter;
     private ActivityTimelineBinding binding;
 
     private TwitterClient client;
     private TweetsAdapter tweetsAdapter;
     private EndlessRecyclerViewScrollListener scrollListener;
     private LinearLayoutManager layoutManager;
+
 
     private List<Tweet> tweets = new ArrayList<>();
     private int lastVisitedTweetPosition = 0;
@@ -92,7 +96,8 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
         binding.timelineRecycleView.setLayoutManager(layoutManager);
         binding.timelineRecycleView.setAdapter(tweetsAdapter);
 
-        populateHomeTimeline();
+        showLoading();
+        populateHomeTimeline(); //hides the indefinite loading bar on success
 
         //Swipe Refresh Listener
         binding.swipeRefreshContainer.setColorSchemeResources(
@@ -104,8 +109,12 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
             public void onRefresh() {
                 Log.d(TAG, "Refresh: Fetching fresh data!");
 
+                //In case footer progress bar had been enabled by another loading action
+                hideLoading();
+
                 //Clears and repopulates
                 populateHomeTimeline();
+
 
                 //Turn off the reload signal
                 binding.swipeRefreshContainer.setRefreshing(false);
@@ -117,6 +126,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 Log.d(TAG, "User tried to load more from page: " + page);
+                showLoading();
                 loadMore();
             }
         };
@@ -124,6 +134,14 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
         //ScrollListener attached to RecyclerView
         binding.timelineRecycleView.addOnScrollListener(scrollListener);
 
+    }
+
+    void showLoading() {
+        binding.progressBar.setVisibility(View.VISIBLE);
+    }
+
+    void hideLoading() {
+        binding.progressBar.setVisibility(View.INVISIBLE);
     }
 
     private void populateHomeTimeline() {
@@ -136,6 +154,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
                 try {
                     tweetsAdapter.clear();
                     tweetsAdapter.addAll(Tweet.fromJSONArray(jsonArray));
+                    hideLoading();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -159,6 +178,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
 
                 try {
                     tweetsAdapter.addAll(Tweet.fromJSONArray(jsonArray));
+                    hideLoading();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
