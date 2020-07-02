@@ -7,23 +7,33 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.codepath.apps.restclienttemplate.TwitterApp;
+import com.codepath.apps.restclienttemplate.TwitterClient;
 import com.codepath.apps.restclienttemplate.databinding.ItemTweetBinding;
+import com.codepath.apps.restclienttemplate.fragments.ComposeFragment;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.apps.restclienttemplate.utilities.DateUtility;
+import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 
 import java.util.List;
+
+import okhttp3.Headers;
 
 public class TweetsAdapter extends  RecyclerView.Adapter<TweetsAdapter.ViewHolder>{
 
     private static final String TAG = "TweetsAdapter";
 
     Context context;
+    TwitterClient twitterClient;
+
     List<Tweet> tweets;
     OnClickListener clickListener;
 
@@ -35,6 +45,7 @@ public class TweetsAdapter extends  RecyclerView.Adapter<TweetsAdapter.ViewHolde
         this.context = context;
         this.tweets = tweets;
         this.clickListener = clickListener;
+        twitterClient = TwitterApp.getRestClient(context);;
     }
 
     @NonNull
@@ -76,7 +87,7 @@ public class TweetsAdapter extends  RecyclerView.Adapter<TweetsAdapter.ViewHolde
             this.binding = binding;
         }
 
-        public void bind(Tweet tweet) {
+        public void bind(final Tweet tweet) {
 
             String timeStamp = DateUtility.getRelativeTimeAgo(tweet.getCreatedAt());
             Log.d(TAG, "New tweet's timeStamp " + timeStamp);
@@ -126,13 +137,129 @@ public class TweetsAdapter extends  RecyclerView.Adapter<TweetsAdapter.ViewHolde
                 binding.tweetMedia.setVisibility(View.GONE);
             }
 
-            //Listeners
+            //LISTENERS
+
+            //Tweet item itself
             binding.tweetItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     /*Sets listener on actual tweet item -> get position
                     and initiate detail-activity from timeline*/
                     clickListener.onItemClick(getAdapterPosition());
+                }
+            });
+
+            //Reply button
+            binding.actionComment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d(TAG, "Reply clicked on tweet: " + tweet.getBody());
+                    //Launches fragment
+                    FragmentManager fm = ((AppCompatActivity) context).getSupportFragmentManager();
+
+                    //param is 'true' for a reply tweet
+                    ComposeFragment editNameDialogFragment = ComposeFragment.newInstance(tweet);
+                    editNameDialogFragment.show(fm, "Compose");
+
+                    Log.d(TAG, "Compose initiated.");
+
+                }
+            });
+
+            //RT button
+            binding.actionRT.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d(TAG, "RT clicked on tweet: " + tweet.getBody());
+
+                    if(tweet.isRetweet()){
+                        //Pressing favorite on RTed tweet will trigger POST request to unRTed it
+                        twitterClient.postUnretweet(tweet.getId(), new JsonHttpResponseHandler() {
+
+                            @Override
+                            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                                Log.d(TAG, "Request to unRT succeeded: " + json.toString());
+                                tweet.toggleRetweeted(); //Updates model
+                                binding.actionRT.setSelected(false); //Updates visual
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                                Log.d(TAG, "Request to unRT failed: " + throwable);
+
+                            }
+                        });
+                    }
+                    else{
+                        //Pressing favorite on unRT tweet will trigger POST request to RT it
+                        twitterClient.postRetweet(tweet.getId(), new JsonHttpResponseHandler() {
+
+                            @Override
+                            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                                Log.d(TAG, "Request to RT succeeded: " + json.toString());
+                                tweet.toggleRetweeted(); //Updates model
+                                binding.actionRT.setSelected(true); //Updated visual
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                                Log.d(TAG, "Request to RT failed: " + throwable);
+                            }
+                        });
+                    }
+                }
+            });
+
+            //Favorite button
+            binding.actionFavorite.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d(TAG, "Favorite clicked on tweet: " + tweet.getBody());
+
+                    if(tweet.isFavorited()){
+                        //Pressing favorite on favorited tweet will trigger POST request to unlike it
+                        twitterClient.postUnlike(tweet.getId(), new JsonHttpResponseHandler() {
+
+                            @Override
+                            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                                Log.d(TAG, "Request to unlike succeeded: " + json.toString());
+                                tweet.toggleFavorited(); //Updates model
+                                binding.actionFavorite.setSelected(false); //Updates visual
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                                Log.d(TAG, "Request to unlike failed: " + throwable);
+
+                            }
+                        });
+                    }
+                    else{
+                        //Pressing favorite on unfavorited tweet will trigger POST request to like it
+                        twitterClient.postLike(tweet.getId(), new JsonHttpResponseHandler() {
+
+                            @Override
+                            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                                Log.d(TAG, "Request to like succeeded: " + json.toString());
+                                tweet.toggleFavorited(); //Updates model
+                                binding.actionFavorite.setSelected(true); //Updated visual
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                                Log.d(TAG, "Request to like failed: " + throwable);
+                            }
+                        });
+                    }
+                }
+            });
+
+            //Share button
+            binding.actionShare.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //TODO: Implement sharing (integration with other apps)
+                    Log.d(TAG, "Share clicked on tweet: " + tweet.getBody());
                 }
             });
         }

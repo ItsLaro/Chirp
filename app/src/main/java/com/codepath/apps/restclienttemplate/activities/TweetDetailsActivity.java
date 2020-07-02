@@ -83,7 +83,8 @@ public class TweetDetailsActivity extends AppCompatActivity implements ComposeFr
             binding.tweetMedia.setVisibility(View.GONE);
         }
 
-        //Setting onClickListeners for tweet actions in the action pane
+        //LISTENERS
+
         //Click listener on Reply button
         binding.actionComment.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,7 +108,7 @@ public class TweetDetailsActivity extends AppCompatActivity implements ComposeFr
                 Log.d(TAG, "RT clicked on tweet: " + detailedTweet.getBody());
 
                 if(detailedTweet.isRetweet()){
-                    //Pressing favorite on favorited tweet will trigger POST request to unlike it
+                    //Pressing favorite on RTed tweet will trigger POST request to unRTed it
                     twitterClient.postUnretweet(detailedTweet.getId(), new JsonHttpResponseHandler() {
 
                         @Override
@@ -125,7 +126,7 @@ public class TweetDetailsActivity extends AppCompatActivity implements ComposeFr
                     });
                 }
                 else{
-                    //Pressing favorite on unfavorited tweet will trigger POST request to like it
+                    //Pressing favorite on unRT tweet will trigger POST request to RT it
                     twitterClient.postRetweet(detailedTweet.getId(), new JsonHttpResponseHandler() {
 
                         @Override
@@ -191,6 +192,7 @@ public class TweetDetailsActivity extends AppCompatActivity implements ComposeFr
         binding.actionShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //TODO: Implement sharing (integration with other apps)
                 Log.d(TAG, "Share clicked on tweet: " + detailedTweet.getBody());
             }
         });
