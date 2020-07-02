@@ -61,7 +61,9 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:textColor="@color/colorBlack"
-            tools:text="@tools:sample/lorem[20]" />
+            tools:text="@tools:sample/lorem[20]"
+            android:linksClickable="true"
+            android:autoLink="all"/>
 
         <LinearLayout
             android:layout_width="match_parent"
