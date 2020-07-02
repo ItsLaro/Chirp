@@ -71,35 +71,60 @@
             android:layout_below="@+id/userBio"
             android:layout_marginTop="8dp"
             android:gravity="left"
-            android:layout_marginBottom="8dp">
+            android:layout_marginBottom="16dp">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/followingCount"
-                tools:text="451"
-                android:layout_marginStart="16dp"
-                android:textStyle="bold"/>
+                android:id="@+id/followingContainer"
+                android:orientation="horizontal"
+                android:layout_below="@+id/userBio"
+                android:gravity="left"
+                android:clickable="true">
 
-            <TextView
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/followingCount"
+                    tools:text="451"
+                    android:layout_marginStart="16dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorBlack"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/FollowingText"
+                    android:layout_marginStart="4dp"
+                    android:text="@string/following_title"/>
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/FollowingText"
-                android:layout_marginStart="4dp"
-                android:text="@string/following_title"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/followerCount"
-                android:layout_marginStart="8dp"
-                tools:text="10.2K"
-                android:textStyle="bold"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/followerText"
-                android:text="@string/followers_title"
-                android:layout_marginStart="4dp" />
+                android:id="@+id/followersContainer"
+                android:orientation="horizontal"
+                android:layout_below="@+id/followerContainer"
+                android:gravity="left"
+                android:clickable="true">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/followerCount"
+                    android:layout_marginStart="8dp"
+                    tools:text="10.2K"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorBlack"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/followerText"
+                    android:text="@string/followers_title"
+                    android:layout_marginStart="4dp" />
+
+            </LinearLayout>
 
         </LinearLayout>
 

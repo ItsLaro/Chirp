@@ -101,8 +101,8 @@ public class TweetDetailsActivity extends AppCompatActivity implements ComposeFr
                 FragmentManager fm = getSupportFragmentManager();
 
                 //param is 'true' for a reply tweet
-                ComposeFragment editNameDialogFragment = ComposeFragment.newInstance(detailedTweet);
-                editNameDialogFragment.show(fm, "Compose");
+                ComposeFragment composeTweetDialogFragment = ComposeFragment.newInstance(detailedTweet);
+                composeTweetDialogFragment.show(fm, "Compose");
 
                 Log.d(TAG, "Compose initiated.");
             }

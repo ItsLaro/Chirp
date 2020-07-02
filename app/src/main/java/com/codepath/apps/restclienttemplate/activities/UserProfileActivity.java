@@ -11,6 +11,7 @@ import android.view.Window;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.codepath.apps.restclienttemplate.R;
 import com.codepath.apps.restclienttemplate.TwitterApp;
 import com.codepath.apps.restclienttemplate.TwitterClient;
 import com.codepath.apps.restclienttemplate.adapters.TweetsAdapter;
@@ -51,7 +52,7 @@ public class UserProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        requestWindowFeature(Window.FEATURE_NO_TITLE); // removes toolbar
+        requestWindowFeature(Window.FEATURE_NO_TITLE); // removes actionbar
         getWindow().setFlags(FLAG_FULLSCREEN,
                 FLAG_FULLSCREEN);
         getSupportActionBar().hide();
@@ -79,11 +80,13 @@ public class UserProfileActivity extends AppCompatActivity {
         //Profile Picture
         Glide.with(this)
                 .load(selectedUser.getProfileImageUrl())
+                .placeholder(R.drawable.default_profilepic)
                 .transform(new CircleCrop())
                 .into(binding.profileImage);
         //Banner
         Glide.with(this)
                 .load(selectedUser.getProfileBanner())
+                .placeholder(R.drawable.default_banner)
                 .centerCrop()
                 .into(binding.profileBanner);
 
@@ -112,6 +115,42 @@ public class UserProfileActivity extends AppCompatActivity {
         binding.profileTimeline.setAdapter(tweetsAdapter);
 
         populatePrfoileTimeline();
+
+        //LISTENERS
+
+        //Click listener on Following field
+        binding.followingContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "Clicked following for: " + selectedUser.getUsername());
+
+                Intent followingListIntent = new Intent(UserProfileActivity.this, UserFollowingListActivity.class);
+
+                //Passing data to the intent
+                followingListIntent.putExtra("user_object", Parcels.wrap(selectedUser));
+
+                UserProfileActivity.this.startActivity(followingListIntent);
+
+                Log.d(TAG, "Following activity initiated.");
+            }
+        });
+
+        //Click listener on Follower field
+        binding.followersContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "Clicked followers for: " + selectedUser.getUsername());
+
+                Intent followerListIntent = new Intent(UserProfileActivity.this, UserFollowersListActivity.class);
+
+                //Passing data to the intent
+                followerListIntent.putExtra("user_object", Parcels.wrap(selectedUser));
+
+                UserProfileActivity.this.startActivity(followerListIntent);
+
+                Log.d(TAG, "Followers activity initiated.");
+            }
+        });
     }
 
     private void populatePrfoileTimeline() {

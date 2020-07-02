@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/userContainer"
+    android:background="@drawable/tweet_background">
+
+    <ImageView
+        android:id="@+id/profileImage"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="8dp"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/profileImage"
+        android:layout_centerInParent="true"
+        android:layout_marginEnd="8dp"
+        android:layout_marginVertical="8dp">
+
+        <TextView
+            android:id="@+id/displayName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            tools:text="Ivan A. Reyes"
+            android:textStyle="bold"
+            android:textSize="16dp"
+            android:textColor="@color/colorBlack"/>
+
+        <TextView
+            android:id="@+id/userHandle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@id/displayName"
+            android:layout_below="@+id/displayName"
+            android:layout_marginStart="4dp"
+            android:layout_toEndOf="@+id/displayName"
+            tools:text="/&#64;ItsLaro"
+            android:textColor="@android:color/darker_gray"/>
+
+
+        <TextView
+            android:id="@+id/userBio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/userHandle"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            tools:text="@tools:sample/lorem[20]"
+            android:textColor="@color/colorBlack"
+            android:maxLines="2"
+            android:ellipsize="end"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

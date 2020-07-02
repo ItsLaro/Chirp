@@ -42,8 +42,6 @@ import okhttp3.Headers;
 public class TimelineActivity extends AppCompatActivity implements ComposeFragment.TweetSubmitListener {
 
     private static final String TAG = "TimelineActivity";
-    private static final int DETAILS_REQUEST_CODE = 1;
-    private static final int PROFILE_REQUEST_CODE = 2;
 
     private Menu mainMenu;
     private ActivityTimelineBinding binding;
@@ -64,6 +62,8 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
         binding = ActivityTimelineBinding.inflate(getLayoutInflater());
         View timelineView = binding.getRoot();
         setContentView(timelineView);
+
+        Log.d(TAG, "Timeline Activity initiated!");
 
         //Client
         client = TwitterApp.getRestClient(this);

@@ -23,7 +23,7 @@ The following **required** functionality is completed:
 
 The following **stretch** features are implemented:
 
-* [ ] User is using **"Twitter branded" colors and styles**
+* [x] User is using **"Twitter branded" colors and styles**
 * [ ] User sees an **indeterminate progress indicator** when any background or network task is happening
 * [x] User can **select "reply" from detail view to respond to a tweet**
   * [x] User that wrote the original tweet is **automatically "@" replied in compose**
@@ -34,14 +34,19 @@ The following **stretch** features are implemented:
 * [ ] User can **click a link within a tweet body** on tweet details view. The click will launch the web browser with relevant page opened.
 * [x] Use Parcelable instead of Serializable using the popular [Parceler library](http://guides.codepath.org/android/Using-Parceler).
 * [x] Replace all icon drawables and other static image assets with [vector drawables](http://guides.codepath.org/android/Drawables#vector-drawables) where appropriate.
-* [ ] User can view following / followers list through any profile they view.
+* [x] User can view following / followers list through any profile they view.
 * [x] Use the View Binding library to reduce view boilerplate.
 * [ ] On the Twitter timeline, leverage the [CoordinatorLayout](http://guides.codepath.org/android/Handling-Scrolls-with-CoordinatorLayout#responding-to-scroll-events) to apply scrolling behavior that [hides / shows the toolbar](http://guides.codepath.org/android/Using-the-App-ToolBar#reacting-to-scroll).
 * [ ] User can **open the twitter app offline and see last loaded tweets**. Persisted in SQLite tweets are refreshed on every application launch. While "live data" is displayed when app can get it from Twitter API, it is also saved for use in offline mode.
 
 The following **additional** features are implemented:
 
-* [ ] List anything else that you can get done to improve the app functionality!
+Anything else I was able to get done to improve the app functionality!
+
+* [x] User profiles include tweet timelines, banner and more!
+* [x] Tweet action buttons are were made visible/interactable also from the list views (home or any profile)
+
+
 
 ## Video Walkthrough
 
