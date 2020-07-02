@@ -8,14 +8,14 @@ import org.parceler.Parcel;
 public class User {
 
     private String name;
-    private String screenName;
+    private String username;
     private String profileImageUrl;
     private String profileSmallImageUrl;
 
     public static User fromJSON(JSONObject jsonObject) throws JSONException {
         User user = new User();
         user.name = jsonObject.getString("name");
-        user.screenName = "@" + jsonObject.getString("screen_name");
+        user.username = "@" + jsonObject.getString("screen_name");
 
         user.profileSmallImageUrl = jsonObject.getString("profile_image_url_https");
             //Ex: 'http://pbs.twimg.com/profile_images/2284174872/7df3h38zabcvjylnyfe3_normal.png'
@@ -38,8 +38,8 @@ public class User {
         return name;
     }
 
-    public String getScreenName() {
-        return screenName;
+    public String getUsername() {
+        return username;
     }
 
     public String getProfileSmallImageUrl() {

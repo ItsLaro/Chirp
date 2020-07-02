@@ -48,60 +48,80 @@ public class TwitterClient extends OAuthBaseClient {
 	//GET
 	public void getHomeTimeline(JsonHttpResponseHandler handler) {
 		String apiUrl = getApiUrl("statuses/home_timeline.json");
-		// Can specify query string params directly or through RequestParams.
+
 		RequestParams params = new RequestParams();
 		params.put("count", "200");
 		params.put("since_id", "1");
 		params.put("include_entities", true);
+
 		client.get(apiUrl, params, handler);
 	}
 
 	public void getNextPageOfTweets(JsonHttpResponseHandler handler, long maxId) {
 		String apiUrl = getApiUrl("statuses/home_timeline.json");
-		// Can specify query string params directly or through RequestParams.
+
 		RequestParams params = new RequestParams();
 		params.put("count", "100");
 		params.put("max_id", maxId - 1); //Subtracting an arbitrary number since we want to exclude the same id
 		params.put("include_entities", true);
+
 		client.get(apiUrl, params, handler);
 	}
 
 	//POST
 	public void postTweet(String tweetContent, JsonHttpResponseHandler handler) {
 		String apiUrl = getApiUrl("statuses/update.json");
-		// Can specify query string params directly or through RequestParams.
+
 		RequestParams params = new RequestParams();
 		params.put("status", tweetContent);
+
 		client.post(apiUrl, params, "", handler);
 	}
 
-	public void postLike(Long tweetID, JsonHttpResponseHandler handler) {
+	public void postReply(String tweetContent, long tweetID, JsonHttpResponseHandler handler) {
+		String apiUrl = getApiUrl("statuses/update.json");
+
+		RequestParams params = new RequestParams();
+		//'status' content must include @username of the author of the tweet in 'in_reply_to_status_id'
+		params.put("status", tweetContent);
+		params.put("in_reply_to_status_id", tweetID);
+
+		client.post(apiUrl, params, "", handler);
+	}
+
+	public void postLike(long tweetID, JsonHttpResponseHandler handler) {
 		String apiUrl = getApiUrl("favorites/create.json");
-		// Can specify query string params directly or through RequestParams.
+
 		RequestParams params = new RequestParams();
 		params.put("id", tweetID);
+
 		client.post(apiUrl, params, "", handler);
 	}
 
-	public void postUnlike(Long tweetID, JsonHttpResponseHandler handler) {
+	public void postUnlike(long tweetID, JsonHttpResponseHandler handler) {
 		String apiUrl = getApiUrl("favorites/destroy.json");
-		// Can specify query string params directly or through RequestParams.
+
 		RequestParams params = new RequestParams();
 		params.put("id", tweetID);
+
 		client.post(apiUrl, params, "", handler);
 	}
 
-	public void postRetweet(Long tweetID, JsonHttpResponseHandler handler) {
+	public void postRetweet(long tweetID, JsonHttpResponseHandler handler) {
 		String apiUrl = getApiUrl(String.format("statuses/retweet/%d.json", tweetID));
+
 		// Can specify query string params directly or through RequestParams.
 		RequestParams params = new RequestParams();
+
 		client.post(apiUrl, params, "", handler);
 	}
 
 	public void postUnretweet(Long tweetID, JsonHttpResponseHandler handler) {
 		String apiUrl = getApiUrl(String.format("statuses/unretweet/%d.json", tweetID));
+
 		// Can specify query string params directly or through RequestParams.
 		RequestParams params = new RequestParams();
+
 		client.post(apiUrl, params, "", handler);
 	}
 

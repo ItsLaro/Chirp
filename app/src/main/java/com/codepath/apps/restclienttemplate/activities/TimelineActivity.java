@@ -53,7 +53,6 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
     private EndlessRecyclerViewScrollListener scrollListener;
     private LinearLayoutManager layoutManager;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -182,11 +181,13 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
         switch (item.getItemId()) {
 
             case R.id.compose_option:
-
                 //Launches fragment
                 FragmentManager fm = getSupportFragmentManager();
-                ComposeFragment editNameDialogFragment = ComposeFragment.newInstance("");
+
+                //param is 'false' for a non-reply tweet
+                ComposeFragment editNameDialogFragment = ComposeFragment.newInstance();
                 editNameDialogFragment.show(fm, "Compose");
+
                 Log.d(TAG, "Compose initiated.");
                 return true;
         }

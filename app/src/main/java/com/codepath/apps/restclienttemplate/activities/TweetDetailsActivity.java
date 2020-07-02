@@ -1,20 +1,20 @@
 package com.codepath.apps.restclienttemplate.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.codepath.apps.restclienttemplate.R;
 import com.codepath.apps.restclienttemplate.TwitterApp;
 import com.codepath.apps.restclienttemplate.TwitterClient;
-import com.codepath.apps.restclienttemplate.databinding.ActivityTimelineBinding;
 import com.codepath.apps.restclienttemplate.databinding.ActivityTweetDetailsBinding;
+import com.codepath.apps.restclienttemplate.fragments.ComposeFragment;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 
@@ -22,14 +22,14 @@ import org.parceler.Parcels;
 
 import okhttp3.Headers;
 
-public class TweetDetailsActivity extends AppCompatActivity {
+public class TweetDetailsActivity extends AppCompatActivity implements ComposeFragment.TweetSubmitListener {
 
     public static final String TAG = "TweetDetailsActivity"; //logging purposes
 
     TwitterClient twitterClient;
     private ActivityTweetDetailsBinding binding;
 
-    private Tweet tweet;
+    private Tweet detailedTweet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,34 +43,34 @@ public class TweetDetailsActivity extends AppCompatActivity {
         twitterClient = TwitterApp.getRestClient(this);
 
         //Getting parcel from last Activity
-        tweet = Parcels.unwrap(getIntent().getParcelableExtra("tweet_object"));
-        Log.d(TAG, "Loaded details for tweet: " + tweet.getBody());
+        detailedTweet = Parcels.unwrap(getIntent().getParcelableExtra("tweet_object"));
+        Log.d(TAG, "Loaded details for tweet: " + detailedTweet.getBody());
 
 
         //Setting views to passed Tweet data
-        binding.displayName.setText(tweet.user.getName());
-        binding.userHandle.setText(tweet.user.getScreenName());
-        binding.tweetBody.setText(tweet.getBody());
-        binding.timestamp.setText(tweet.getCreatedAt());
+        binding.displayName.setText(detailedTweet.user.getName());
+        binding.userHandle.setText(detailedTweet.user.getUsername());
+        binding.tweetBody.setText(detailedTweet.getBody());
+        binding.timestamp.setText(detailedTweet.getCreatedAt());
 
-        if(tweet.isFavorited()){
+        if(detailedTweet.isFavorited()){
             binding.actionFavorite.setSelected(true);
         }
 
-        if(tweet.isRetweet()){
+        if(detailedTweet.isRetweet()){
             binding.actionRT.setSelected(true);
         }
         //Media
         Glide.with(this)
-                .load(tweet.user.getProfileImageUrl())
+                .load(detailedTweet.user.getProfileImageUrl())
                 .transform(new CircleCrop())
                 .into(binding.profileImage);
 
         //If there's an image
-        if(tweet.getMediaUrls().size() > 0){
+        if(detailedTweet.getMediaUrls().size() > 0){
             //Set media
             Glide.with(this)
-                    .load(tweet.getMediaUrl(0))
+                    .load(detailedTweet.getMediaUrl(0))
                     .centerCrop()
                     .transform(new RoundedCorners(30))
                     .into(binding.tweetMedia);
@@ -84,10 +84,19 @@ public class TweetDetailsActivity extends AppCompatActivity {
         }
 
         //Setting onClickListeners for tweet actions in the action pane
+        //Click listener on Reply button
         binding.actionComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "Reply clicked on tweet: " + tweet.getBody());
+                Log.d(TAG, "Reply clicked on tweet: " + detailedTweet.getBody());
+                //Launches fragment
+                FragmentManager fm = getSupportFragmentManager();
+
+                //param is 'true' for a reply tweet
+                ComposeFragment editNameDialogFragment = ComposeFragment.newInstance(detailedTweet);
+                editNameDialogFragment.show(fm, "Compose");
+
+                Log.d(TAG, "Compose initiated.");
             }
         });
 
@@ -95,16 +104,16 @@ public class TweetDetailsActivity extends AppCompatActivity {
         binding.actionRT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "RT clicked on tweet: " + tweet.getBody());
+                Log.d(TAG, "RT clicked on tweet: " + detailedTweet.getBody());
 
-                if(tweet.isRetweet()){
+                if(detailedTweet.isRetweet()){
                     //Pressing favorite on favorited tweet will trigger POST request to unlike it
-                    twitterClient.postUnretweet(tweet.getId(), new JsonHttpResponseHandler() {
+                    twitterClient.postUnretweet(detailedTweet.getId(), new JsonHttpResponseHandler() {
 
                         @Override
                         public void onSuccess(int statusCode, Headers headers, JSON json) {
                             Log.d(TAG, "Request to unRT succeeded: " + json.toString());
-                            tweet.toggleRetweeted(); //Updates model
+                            detailedTweet.toggleRetweeted(); //Updates model
                             binding.actionRT.setSelected(false); //Updates visual
                         }
 
@@ -117,12 +126,12 @@ public class TweetDetailsActivity extends AppCompatActivity {
                 }
                 else{
                     //Pressing favorite on unfavorited tweet will trigger POST request to like it
-                    twitterClient.postRetweet(tweet.getId(), new JsonHttpResponseHandler() {
+                    twitterClient.postRetweet(detailedTweet.getId(), new JsonHttpResponseHandler() {
 
                         @Override
                         public void onSuccess(int statusCode, Headers headers, JSON json) {
                             Log.d(TAG, "Request to RT succeeded: " + json.toString());
-                            tweet.toggleRetweeted(); //Updates model
+                            detailedTweet.toggleRetweeted(); //Updates model
                             binding.actionRT.setSelected(true); //Updated visual
                         }
 
@@ -139,16 +148,16 @@ public class TweetDetailsActivity extends AppCompatActivity {
         binding.actionFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "Favorite clicked on tweet: " + tweet.getBody());
+                Log.d(TAG, "Favorite clicked on tweet: " + detailedTweet.getBody());
 
-                if(tweet.isFavorited()){
+                if(detailedTweet.isFavorited()){
                     //Pressing favorite on favorited tweet will trigger POST request to unlike it
-                    twitterClient.postUnlike(tweet.getId(), new JsonHttpResponseHandler() {
+                    twitterClient.postUnlike(detailedTweet.getId(), new JsonHttpResponseHandler() {
 
                         @Override
                         public void onSuccess(int statusCode, Headers headers, JSON json) {
                             Log.d(TAG, "Request to unlike succeeded: " + json.toString());
-                            tweet.toggleFavorited(); //Updates model
+                            detailedTweet.toggleFavorited(); //Updates model
                             binding.actionFavorite.setSelected(false); //Updates visual
                         }
 
@@ -161,12 +170,12 @@ public class TweetDetailsActivity extends AppCompatActivity {
                 }
                 else{
                     //Pressing favorite on unfavorited tweet will trigger POST request to like it
-                    twitterClient.postLike(tweet.getId(), new JsonHttpResponseHandler() {
+                    twitterClient.postLike(detailedTweet.getId(), new JsonHttpResponseHandler() {
 
                         @Override
                         public void onSuccess(int statusCode, Headers headers, JSON json) {
                             Log.d(TAG, "Request to like succeeded: " + json.toString());
-                            tweet.toggleFavorited(); //Updates model
+                            detailedTweet.toggleFavorited(); //Updates model
                             binding.actionFavorite.setSelected(true); //Updated visual
                         }
 
@@ -182,8 +191,14 @@ public class TweetDetailsActivity extends AppCompatActivity {
         binding.actionShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "Share clicked on tweet: " + tweet.getBody());
+                Log.d(TAG, "Share clicked on tweet: " + detailedTweet.getBody());
             }
         });
+    }
+
+    @Override
+    public void sendInput(Tweet postedTweet) {
+        Log.d(TAG, "Acquired tweet: " + postedTweet.getBody());
+
     }
 }

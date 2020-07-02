@@ -1,7 +1,6 @@
 package com.codepath.apps.restclienttemplate.fragments;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -9,17 +8,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.codepath.apps.restclienttemplate.R;
@@ -28,7 +21,6 @@ import com.codepath.apps.restclienttemplate.TwitterClient;
 import com.codepath.apps.restclienttemplate.databinding.FragmentComposeBinding;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
-import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONException;
 
@@ -48,6 +40,7 @@ public class ComposeFragment extends DialogFragment{
     TwitterClient twitterClient;
     FragmentComposeBinding binding;
     String tweetContent;
+    private Tweet replyingToTweet;
 
 
     //Interface to be used as callback to get tweet content from fragment
@@ -62,14 +55,27 @@ public class ComposeFragment extends DialogFragment{
 
     /**
      * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
+     * this fragment in order to compose and POST a regular tweet
      * @return A new instance of fragment ComposeFragment.
      */
-    public static ComposeFragment newInstance(String param1) {
+    public static ComposeFragment newInstance() {
         ComposeFragment fragment = new ComposeFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
+        return fragment;
+    }
+
+    /**
+     * This factory method creates a new instance of
+     * this fragment in order to reply to another tweet
+     * @param inReplyToTweet Tweet to reply to
+     * @return A new instance of fragment ComposeFragment.
+     */
+    public static ComposeFragment newInstance(Tweet inReplyToTweet) {
+        ComposeFragment fragment = new ComposeFragment();
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
+        fragment.replyingToTweet = inReplyToTweet;
         return fragment;
     }
 
@@ -96,17 +102,29 @@ public class ComposeFragment extends DialogFragment{
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         // Show soft keyboard automatically and request focus to field
         binding.composeTweet.requestFocus();
         getDialog().getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 
+        //Check if this is a reply tweet
+        if(replyingToTweet instanceof Tweet){
+            Log.d(TAG, "Replying to: " + replyingToTweet);
+            //Set views to reflect tweet is being composed as a reply
+            binding.composeTitle.setText("Replying to " + replyingToTweet.user.getUsername());
+            binding.composeTweet.setHint(R.string.reply_hint);
+        }
+        else{
+            Log.d(TAG, "Tweeting!");
+        }
 
         //Listener on 'Tweet'/Submit button for taps
         binding.tweetButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
 
+                //User's inputted aspiring-tweet
                 tweetContent = binding.composeTweet.getText().toString();
 
                 if(tweetContent.isEmpty()){
@@ -117,40 +135,76 @@ public class ComposeFragment extends DialogFragment{
                 else if(tweetContent.length() > MAX_TWEET_LENGTH){
                     //Displays floating label error
                     binding.composeTitleLayout.setError(getString(R.string.long_tweet_error));
-                    binding.composeTitleLayout.setErrorEnabled(true);                }
+                    binding.composeTitleLayout.setErrorEnabled(true);
+                }
                 else {
-                    Toast.makeText(getActivity(), "Tweet is good!", Toast.LENGTH_SHORT).show();
-                    twitterClient.postTweet(tweetContent, new JsonHttpResponseHandler() {
-                        @Override
-                        public void onSuccess(int statusCode, Headers headers, JSON json) {
+                    //Check if this is a reply tweet
+                    if(replyingToTweet instanceof Tweet){
 
-                            Log.d(TAG, "Success: POSTED " + json.toString());
+                        String replyWithMention = replyingToTweet.user.getUsername() + " " + tweetContent;
 
-                            try {
+                        twitterClient.postReply(replyWithMention, replyingToTweet.getId(), new JsonHttpResponseHandler() {
+                            @Override
+                            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                                Log.d(TAG, "Success: POSTED " + json.toString());
+                                Toast.makeText(getActivity(), "Tweet is posted!", Toast.LENGTH_SHORT).show();
 
-                                Tweet newTweet = Tweet.fromJSON(json.jsonObject);
-                                Log.d(TAG, "Published Tweet: " + newTweet.getBody());
+                                try {
+                                    Tweet newTweet = Tweet.fromJSON(json.jsonObject);
+                                    Log.d(TAG, "Published Tweet: " + newTweet.getBody());
 
-                                //interface captures the input & sends back to the activity
-                                tweetSubmitListener.sendInput(newTweet);
+                                    //interface captures the input & sends back to the activity
+                                    tweetSubmitListener.sendInput(newTweet);
 
-                            } catch (JSONException e) {
+                                } catch (JSONException e) {
 
-                                Log.e(TAG, "Error parsing JSON: " + e);
+                                    Log.e(TAG, "Error parsing JSON: " + e);
 
+                                }
+                                getDialog().dismiss(); //Dismisses tweet-composing fragment
                             }
-                            getDialog().dismiss(); //Dismisses tweet-composing fragment
-                        }
 
-                        @Override
-                        public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                            @Override
+                            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
 
-                            Log.d(TAG, "Failure: " + throwable.toString());
+                                Log.d(TAG, "Failure: " + throwable.toString());
 
-                            Toast.makeText(getActivity(), "Unable to reach Twitter", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                                Toast.makeText(getActivity(), "Unable to reach Twitter", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                    else {
+                        //It's a regular tweet
+                        twitterClient.postTweet(tweetContent, new JsonHttpResponseHandler() {
+                            @Override
+                            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                                Log.d(TAG, "Success: POSTED " + json.toString());
+                                Toast.makeText(getActivity(), "Tweet is posted!", Toast.LENGTH_SHORT).show();
 
+                                try {
+                                    Tweet newTweet = Tweet.fromJSON(json.jsonObject);
+                                    Log.d(TAG, "Published Tweet: " + newTweet.getBody());
+
+                                    //interface captures the input & sends back to the activity
+                                    tweetSubmitListener.sendInput(newTweet);
+
+                                } catch (JSONException e) {
+
+                                    Log.e(TAG, "Error parsing JSON: " + e);
+
+                                }
+                                getDialog().dismiss(); //Dismisses tweet-composing fragment
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+
+                                Log.d(TAG, "Failure: " + throwable.toString());
+
+                                Toast.makeText(getActivity(), "Unable to reach Twitter", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
                 }
             }
         });
