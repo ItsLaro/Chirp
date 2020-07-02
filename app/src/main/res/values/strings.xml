@@ -13,5 +13,9 @@
     <string name="long_tweet_error">tweet exceeds 140 character limit</string>
     <string name="tweet_details_title">Tweet</string>
     <string name="reply_hint">Tweet your reply</string>
+    <string name="following_title">Following</string>
+    <string name="followers_title">Followers</string>
+    <string name="retweets_title">Retweets</string>
+    <string name="likes_title">Likes</string>
 
 </resources>

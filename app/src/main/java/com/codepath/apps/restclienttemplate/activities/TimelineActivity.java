@@ -42,16 +42,21 @@ import okhttp3.Headers;
 public class TimelineActivity extends AppCompatActivity implements ComposeFragment.TweetSubmitListener {
 
     private static final String TAG = "TimelineActivity";
+    private static final int DETAILS_REQUEST_CODE = 1;
+    private static final int PROFILE_REQUEST_CODE = 2;
 
     private Menu mainMenu;
     private ActivityTimelineBinding binding;
 
     private TwitterClient client;
     private TweetsAdapter tweetsAdapter;
-    private List<Tweet> tweets = new ArrayList<>();
-
     private EndlessRecyclerViewScrollListener scrollListener;
     private LinearLayoutManager layoutManager;
+
+    private List<Tweet> tweets = new ArrayList<>();
+    private int lastVisitedTweetPosition = 0;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,10 +72,15 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
         TweetsAdapter.OnClickListener onClickListener = new TweetsAdapter.OnClickListener() {
             @Override
             public void onItemClick(int position) {
-                Intent tweetDetailsIntent = new Intent(TimelineActivity.this, TweetDetailsActivity.class);
+
+                Intent tweetDetailsIntent = new Intent(TimelineActivity.this,
+                        TweetDetailsActivity.class);
+
+                /* Storing position so we can refresh recycle view
+                and smooth scroll back to where we were */
+                lastVisitedTweetPosition = position;
 
                 //Passing data to the intent
-                tweetDetailsIntent.putExtra("tweet_position", position);
                 tweetDetailsIntent.putExtra("tweet_object", Parcels.wrap(tweets.get(position)));
 
                 startActivity(tweetDetailsIntent);
@@ -202,6 +212,5 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
         tweets.add(0, postedTweet);
         tweetsAdapter.notifyItemInserted(0);
         binding.timelineRecycleView.smoothScrollToPosition(0);
-
     }
 }

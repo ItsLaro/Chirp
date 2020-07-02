@@ -48,7 +48,7 @@
                 android:layout_alignStart="@+id/displayName"
                 android:layout_below="@+id/displayName"
                 android:textColor="@android:color/darker_gray"
-                tools:text=" &#64;ItsLaro" />
+                tools:text="/&#64;ItsLaro" />
 
             <TextView
                 android:id="@+id/timestamp"
@@ -107,7 +107,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/textRT"
                 android:layout_marginStart="4dp"
-                android:text="Retweets"/>
+                android:text="@string/retweets_title"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -119,7 +119,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/textLikes"
-                android:text="Likes"
+                android:text="@string/likes_title"
                 android:layout_marginStart="4dp" />
 
         </LinearLayout>

@@ -1,6 +1,7 @@
 package com.codepath.apps.restclienttemplate.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,11 +18,16 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.codepath.apps.restclienttemplate.TwitterApp;
 import com.codepath.apps.restclienttemplate.TwitterClient;
+import com.codepath.apps.restclienttemplate.activities.TimelineActivity;
+import com.codepath.apps.restclienttemplate.activities.TweetDetailsActivity;
+import com.codepath.apps.restclienttemplate.activities.UserProfileActivity;
 import com.codepath.apps.restclienttemplate.databinding.ItemTweetBinding;
 import com.codepath.apps.restclienttemplate.fragments.ComposeFragment;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.apps.restclienttemplate.utilities.DateUtility;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
+
+import org.parceler.Parcels;
 
 import java.util.List;
 
@@ -116,6 +122,7 @@ public class TweetsAdapter extends  RecyclerView.Adapter<TweetsAdapter.ViewHolde
                 binding.actionRT.setSelected(false);
             }
 
+            //Loading profile picture
             Glide.with(context)
                     .load(tweet.user.getProfileImageUrl())
                     .transform(new CircleCrop())
@@ -260,6 +267,21 @@ public class TweetsAdapter extends  RecyclerView.Adapter<TweetsAdapter.ViewHolde
                 public void onClick(View view) {
                     //TODO: Implement sharing (integration with other apps)
                     Log.d(TAG, "Share clicked on tweet: " + tweet.getBody());
+                }
+            });
+
+            //Profile Picture button
+            binding.profileImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d(TAG, "Profile clicked: " + tweet.user.getUsername());
+
+                    Intent userProfileIntent = new Intent(context, UserProfileActivity.class);
+
+                    //Passing data to the intent
+                    userProfileIntent.putExtra("user_object", Parcels.wrap(tweet.user));
+
+                    context.startActivity(userProfileIntent);
                 }
             });
         }

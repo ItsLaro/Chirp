@@ -3,11 +3,13 @@ package com.codepath.apps.restclienttemplate.activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.codepath.apps.restclienttemplate.R;
@@ -42,6 +44,8 @@ public class TweetDetailsActivity extends AppCompatActivity implements ComposeFr
 
         twitterClient = TwitterApp.getRestClient(this);
 
+
+
         //Getting parcel from last Activity
         detailedTweet = Parcels.unwrap(getIntent().getParcelableExtra("tweet_object"));
         Log.d(TAG, "Loaded details for tweet: " + detailedTweet.getBody());
@@ -52,6 +56,9 @@ public class TweetDetailsActivity extends AppCompatActivity implements ComposeFr
         binding.userHandle.setText(detailedTweet.user.getUsername());
         binding.tweetBody.setText(detailedTweet.getBody());
         binding.timestamp.setText(detailedTweet.getCreatedAt());
+        binding.numberRT.setText(Integer.toString(detailedTweet.getRetweetCount()));
+        binding.numberLikes.setText(Integer.toString(detailedTweet.getFavoriteCount()));
+
 
         if(detailedTweet.isFavorited()){
             binding.actionFavorite.setSelected(true);
@@ -60,7 +67,8 @@ public class TweetDetailsActivity extends AppCompatActivity implements ComposeFr
         if(detailedTweet.isRetweet()){
             binding.actionRT.setSelected(true);
         }
-        //Media
+
+        //Profile picture
         Glide.with(this)
                 .load(detailedTweet.user.getProfileImageUrl())
                 .transform(new CircleCrop())
@@ -71,8 +79,7 @@ public class TweetDetailsActivity extends AppCompatActivity implements ComposeFr
             //Set media
             Glide.with(this)
                     .load(detailedTweet.getMediaUrl(0))
-                    .centerCrop()
-                    .transform(new RoundedCorners(30))
+                    .transform(new CenterCrop(), new RoundedCorners(30))
                     .into(binding.tweetMedia);
 
             //Recovers visibility on a recycled item after it had been toggled off
@@ -196,11 +203,26 @@ public class TweetDetailsActivity extends AppCompatActivity implements ComposeFr
                 Log.d(TAG, "Share clicked on tweet: " + detailedTweet.getBody());
             }
         });
+
+        //Profile Picture button
+        binding.profileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "Profile clicked: " + detailedTweet.user.getUsername());
+
+                Intent userProfileIntent = new Intent(TweetDetailsActivity.this, UserProfileActivity.class);
+
+                //Passing data to the intent
+                userProfileIntent.putExtra("user_object", Parcels.wrap(detailedTweet.user));
+
+                TweetDetailsActivity.this.startActivity(userProfileIntent);
+            }
+        });
     }
 
     @Override
     public void sendInput(Tweet postedTweet) {
         Log.d(TAG, "Acquired tweet: " + postedTweet.getBody());
-
     }
+
 }
