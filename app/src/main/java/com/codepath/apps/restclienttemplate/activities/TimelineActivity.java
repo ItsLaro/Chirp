@@ -29,6 +29,8 @@ import com.codepath.apps.restclienttemplate.fragments.ComposeFragment;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.apps.restclienttemplate.utilities.EndlessRecyclerViewScrollListener;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -134,6 +136,20 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
         //ScrollListener attached to RecyclerView
         binding.timelineRecycleView.addOnScrollListener(scrollListener);
 
+        binding.fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Launches fragment
+                FragmentManager fm = getSupportFragmentManager();
+
+                //param is 'false' for a non-reply tweet
+                ComposeFragment editNameDialogFragment = ComposeFragment.newInstance();
+                editNameDialogFragment.show(fm, "Compose");
+
+                Log.d(TAG, "Compose initiated.");
+
+            }
+        });
     }
 
     void showLoading() {
@@ -194,33 +210,17 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu_main, menu);
-        mainMenu = menu;
-        return true;
-    }
-
-
-    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         /**
          * Listener for toolbar options
          */
 
-        switch (item.getItemId()) {
-
-            case R.id.compose_option:
-                //Launches fragment
-                FragmentManager fm = getSupportFragmentManager();
-
-                //param is 'false' for a non-reply tweet
-                ComposeFragment editNameDialogFragment = ComposeFragment.newInstance();
-                editNameDialogFragment.show(fm, "Compose");
-
-                Log.d(TAG, "Compose initiated.");
-                return true;
-        }
+//        switch (item.getItemId()) {
+//
+//            case R.id.compose_option:
+//
+//                return true;
+//        }
         return true;
     }
 

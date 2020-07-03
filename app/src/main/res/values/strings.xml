@@ -17,5 +17,6 @@
     <string name="followers_title">Followers</string>
     <string name="retweets_title">Retweets</string>
     <string name="likes_title">Likes</string>
+    <string name="compose">Compose your Tweet!</string>
 
 </resources>
