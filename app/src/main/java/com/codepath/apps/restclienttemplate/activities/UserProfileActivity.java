@@ -52,12 +52,6 @@ public class UserProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        requestWindowFeature(Window.FEATURE_NO_TITLE); // removes actionbar
-        getWindow().setFlags(FLAG_FULLSCREEN,
-                FLAG_FULLSCREEN);
-        getSupportActionBar().hide();
-
-
         binding = ActivityUserProfileBinding.inflate(getLayoutInflater());
         View userProfileView = binding.getRoot();
         setContentView(userProfileView);
