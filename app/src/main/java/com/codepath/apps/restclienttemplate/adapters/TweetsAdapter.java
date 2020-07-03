@@ -37,11 +37,11 @@ public class TweetsAdapter extends  RecyclerView.Adapter<TweetsAdapter.ViewHolde
 
     private static final String TAG = "TweetsAdapter";
 
-    Context context;
-    TwitterClient twitterClient;
+    private Context context;
+    private TwitterClient twitterClient;
 
-    List<Tweet> tweets;
-    OnClickListener clickListener;
+    private List<Tweet> tweets;
+    private OnClickListener clickListener;
 
     public interface  OnClickListener{
         void onItemClick(int position);

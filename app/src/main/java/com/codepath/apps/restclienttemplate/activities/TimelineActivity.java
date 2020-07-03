@@ -56,11 +56,8 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
     private EndlessRecyclerViewScrollListener scrollListener;
     private LinearLayoutManager layoutManager;
 
-
     private List<Tweet> tweets = new ArrayList<>();
     private int lastVisitedTweetPosition = 0;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,7 +144,6 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
                 editNameDialogFragment.show(fm, "Compose");
 
                 Log.d(TAG, "Compose initiated.");
-
             }
         });
     }
@@ -213,20 +209,14 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         /**
          * Listener for toolbar options
+         * TODO: Set main icon on center of tool bar--> Clicking it takes you to adapter item #1
          */
 
-//        switch (item.getItemId()) {
-//
-//            case R.id.compose_option:
-//
-//                return true;
-//        }
         return true;
     }
 
     @Override
     public void sendInput(Tweet postedTweet) {
-
         Log.d(TAG, "Acquired tweet: " + postedTweet.getBody());
 
         tweets.add(0, postedTweet);

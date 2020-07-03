@@ -28,7 +28,7 @@ public class TweetDetailsActivity extends AppCompatActivity implements ComposeFr
 
     public static final String TAG = "TweetDetailsActivity"; //logging purposes
 
-    TwitterClient twitterClient;
+    private TwitterClient twitterClient;
     private ActivityTweetDetailsBinding binding;
 
     private Tweet detailedTweet;
@@ -44,12 +44,9 @@ public class TweetDetailsActivity extends AppCompatActivity implements ComposeFr
 
         twitterClient = TwitterApp.getRestClient(this);
 
-
-
         //Getting parcel from last Activity
         detailedTweet = Parcels.unwrap(getIntent().getParcelableExtra("tweet_object"));
         Log.d(TAG, "Loaded details for tweet: " + detailedTweet.getBody());
-
 
         //Setting views to passed Tweet data
         binding.displayName.setText(detailedTweet.user.getName());
@@ -58,7 +55,6 @@ public class TweetDetailsActivity extends AppCompatActivity implements ComposeFr
         binding.timestamp.setText(detailedTweet.getCreatedAt());
         binding.numberRT.setText(Integer.toString(detailedTweet.getRetweetCount()));
         binding.numberLikes.setText(Integer.toString(detailedTweet.getFavoriteCount()));
-
 
         if(detailedTweet.isFavorited()){
             binding.actionFavorite.setSelected(true);
@@ -224,5 +220,4 @@ public class TweetDetailsActivity extends AppCompatActivity implements ComposeFr
     public void sendInput(Tweet postedTweet) {
         Log.d(TAG, "Acquired tweet: " + postedTweet.getBody());
     }
-
 }

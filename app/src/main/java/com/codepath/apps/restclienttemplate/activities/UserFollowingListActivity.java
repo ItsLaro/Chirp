@@ -33,7 +33,7 @@ public class UserFollowingListActivity extends AppCompatActivity {
 
     private static String TAG = "UserFollowingListActivity";
 
-    ActivityUserFollowingListBinding binding;
+    private ActivityUserFollowingListBinding binding;
 
     private TwitterClient client;
     private UsersAdapter usersAdapter;

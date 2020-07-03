@@ -84,7 +84,6 @@ public class UserFollowersListActivity extends AppCompatActivity {
         binding.followersRecycleView.setAdapter(usersAdapter);
 
         populateFollowersList();
-
     }
 
     private void populateFollowersList() {

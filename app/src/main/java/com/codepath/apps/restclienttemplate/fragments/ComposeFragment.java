@@ -42,7 +42,6 @@ public class ComposeFragment extends DialogFragment{
     String tweetContent;
     private Tweet replyingToTweet;
 
-
     //Interface to be used as callback to get tweet content from fragment
     public interface TweetSubmitListener{
         void sendInput(Tweet submittedTweet);

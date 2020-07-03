@@ -44,7 +44,7 @@ public class UserProfileActivity extends AppCompatActivity {
     private LinearLayoutManager layoutManager;
 
     private List<Tweet> profileTweets = new ArrayList<>();
-    int lastVisitedTweetPosition = 0;
+    private int lastVisitedTweetPosition = 0;
 
     User selectedUser;
 
@@ -62,7 +62,6 @@ public class UserProfileActivity extends AppCompatActivity {
         //Getting parcel from last Activity
         selectedUser = Parcels.unwrap(getIntent().getParcelableExtra("user_object"));
         Log.d(TAG, "Loaded details for tweet: " + selectedUser.getUsername());
-
 
         //Setting views to passed Tweet data
         binding.displayName.setText(selectedUser.getName());
