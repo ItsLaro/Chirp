@@ -211,12 +211,12 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
          * Listener for toolbar options
          * TODO: Set main icon on center of tool bar--> Clicking it takes you to adapter item #1
          */
-
         return true;
     }
 
     @Override
     public void sendInput(Tweet postedTweet) {
+
         Log.d(TAG, "Acquired tweet: " + postedTweet.getBody());
 
         tweets.add(0, postedTweet);
