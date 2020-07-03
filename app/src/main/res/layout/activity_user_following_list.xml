@@ -6,11 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".activities.UserFollowingListActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:layout_scrollFlags="scroll|enterAlways"
+        app:theme="@style/ToolBarStyle"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/followingRecycleView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"/>
+        android:layout_below="@id/toolbar"
+        android:layout_alignParentStart="true"/>
 
 </RelativeLayout>

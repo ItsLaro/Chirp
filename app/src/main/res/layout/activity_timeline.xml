@@ -22,7 +22,8 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|enterAlways" />
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:theme="@style/ToolBarStyle"/>
     </com.google.android.material.appbar.AppBarLayout>
 
     <!-- This could also be included from another file using the include tag -->

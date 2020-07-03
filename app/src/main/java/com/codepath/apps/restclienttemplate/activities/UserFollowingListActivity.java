@@ -1,6 +1,7 @@
 package com.codepath.apps.restclienttemplate.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.content.Intent;
@@ -33,6 +34,7 @@ public class UserFollowingListActivity extends AppCompatActivity {
 
     private static String TAG = "UserFollowingListActivity";
 
+    private Toolbar toolbar;
     private ActivityUserFollowingListBinding binding;
 
     private TwitterClient client;
@@ -47,12 +49,15 @@ public class UserFollowingListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle(R.string.following_title);
 
         //Setting up View Binds
         binding = ActivityUserFollowingListBinding.inflate(getLayoutInflater());
         View userListView = binding.getRoot();
         setContentView(userListView);
+
+        toolbar = binding.toolbar;
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(R.string.following_title);
 
         //Client
         client = TwitterApp.getRestClient(this);

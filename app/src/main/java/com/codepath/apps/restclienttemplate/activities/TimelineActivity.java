@@ -2,6 +2,7 @@ package com.codepath.apps.restclienttemplate.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -47,7 +48,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
 
     private static final String TAG = "TimelineActivity";
 
-    private Menu mainMenu;
+    private Toolbar toolbar;
     private ProgressBar progressBarFooter;
     private ActivityTimelineBinding binding;
 
@@ -65,6 +66,11 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
         binding = ActivityTimelineBinding.inflate(getLayoutInflater());
         View timelineView = binding.getRoot();
         setContentView(timelineView);
+
+        toolbar = binding.toolbar;
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setIcon(R.drawable.ic_twitter);
+
 
         Log.d(TAG, "Timeline Activity initiated!");
 

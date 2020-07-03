@@ -1,6 +1,7 @@
 package com.codepath.apps.restclienttemplate.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
@@ -28,6 +29,7 @@ public class TweetDetailsActivity extends AppCompatActivity implements ComposeFr
 
     public static final String TAG = "TweetDetailsActivity"; //logging purposes
 
+    Toolbar toolbar;
     private TwitterClient twitterClient;
     private ActivityTweetDetailsBinding binding;
 
@@ -40,7 +42,10 @@ public class TweetDetailsActivity extends AppCompatActivity implements ComposeFr
         binding = ActivityTweetDetailsBinding.inflate(getLayoutInflater());
         View timelineView = binding.getRoot();
         setContentView(timelineView);
-        setTitle(R.string.tweet_details_title);
+
+        toolbar = binding.toolbar;
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(R.string.tweet_details_title);
 
         twitterClient = TwitterApp.getRestClient(this);
 
