@@ -69,8 +69,8 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
 
         toolbar = binding.toolbar;
         setSupportActionBar(toolbar);
-        getSupportActionBar().setIcon(R.drawable.ic_twitter);
-
+        getSupportActionBar().setLogo(R.drawable.ic_twitter_logo_blue);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         Log.d(TAG, "Timeline Activity initiated!");
 
