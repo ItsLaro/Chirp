@@ -2,36 +2,53 @@ package com.codepath.apps.restclienttemplate.models;
 
 import android.util.Log;
 
-import com.facebook.stetho.inspector.jsonrpc.JsonRpcException;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.Parcel;
-import org.parceler.ParcelConstructor;
 import org.parceler.Transient;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Parcel
+@Entity(foreignKeys = @ForeignKey(entity=User.class, parentColumns="id", childColumns="userId"))
 public class Tweet {
 
     //package private or public fields (required by Parceler)
+    @ColumnInfo @PrimaryKey
     long id;
-
+    @ColumnInfo
     String body;
+    @ColumnInfo
     String createdAt;
-    public User user;
 
+    @Ignore
+    public User user;
+    @ColumnInfo
+    long userId;
+
+
+    @ColumnInfo
     int retweetCount;
+    @ColumnInfo
     int favoriteCount;
+    @ColumnInfo
     boolean isFavorited;
+    @ColumnInfo
     boolean isRetweet;
 
-    @Transient
+
+    @Transient @Ignore
     JSONObject entities;
 
+    @Ignore
     List<String> mediaUrls = new ArrayList<>();
 
     public Tweet(){
@@ -48,6 +65,10 @@ public class Tweet {
 
     public String getCreatedAt() {
         return createdAt;
+    }
+
+    public long getUserId() {
+        return userId;
     }
 
     public int getRetweetCount() {
@@ -83,6 +104,38 @@ public class Tweet {
         return mediaURL;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
+
+    public void setRetweetCount(int retweetCount) {
+        this.retweetCount = retweetCount;
+    }
+
+    public void setFavoriteCount(int favoriteCount) {
+        this.favoriteCount = favoriteCount;
+    }
+
+    public void setFavorited(boolean favorited) {
+        isFavorited = favorited;
+    }
+
+    public void setRetweet(boolean retweet) {
+        isRetweet = retweet;
+    }
+
     public static Tweet fromJSON(JSONObject jsonObject) throws JSONException {
         Tweet tweet = new Tweet();
 
@@ -90,7 +143,9 @@ public class Tweet {
 
         tweet.body = jsonObject.getString("text");
         tweet.createdAt = jsonObject.getString("created_at");
+
         tweet.user = User.fromJSON(jsonObject.getJSONObject("user"));
+        tweet.userId = tweet.user.getId();
 
         tweet.retweetCount = jsonObject.getInt("retweet_count");
         tweet.favoriteCount = jsonObject.getInt("favorite_count");
@@ -108,11 +163,11 @@ public class Tweet {
                 tweet.mediaUrls.add(mediaEntities.getJSONObject(i).getString("media_url_https"));
             }
 
-            Log.i("TweetMedia", "Media! Found: " + tweet.mediaUrls.toString());
+            Log.d("TweetMedia", "Media! Found: " + tweet.mediaUrls.toString());
 
         }else{
 
-            Log.i("TweetMedia", "No media on tweet");
+            Log.d("TweetMedia", "No media on tweet");
 
         }
 

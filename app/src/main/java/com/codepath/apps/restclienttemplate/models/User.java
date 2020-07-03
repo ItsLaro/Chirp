@@ -2,6 +2,10 @@ package com.codepath.apps.restclienttemplate.models;
 
 import android.util.Log;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,16 +14,29 @@ import org.parceler.Parcel;
 import java.util.ArrayList;
 import java.util.List;
 
-@Parcel
+@Parcel @Entity
 public class User {
 
-    private String name;
-    private String username;
-    private String profileImageUrl;
-    private String profileBanner;
-    private String bio;
-    private int followingCount;
-    private int followersCount;
+    @ColumnInfo @PrimaryKey
+    long id;
+    @ColumnInfo
+    String name;
+    @ColumnInfo
+    String username;
+    @ColumnInfo
+    String profileImageUrl;
+    @ColumnInfo
+    String profileBanner;
+    @ColumnInfo
+    String bio;
+    @ColumnInfo
+    int followingCount;
+    @ColumnInfo
+    int followersCount;
+
+    public long getId() {
+        return id;
+    }
 
     public String getName() {
         return name;
@@ -51,6 +68,7 @@ public class User {
 
     public static User fromJSON(JSONObject jsonObject) throws JSONException {
         User user = new User();
+        user.id = jsonObject.getLong("id");
         user.name = jsonObject.getString("name");
         user.username = "@" + jsonObject.getString("screen_name");
 
@@ -84,6 +102,14 @@ public class User {
         List<User> users = new ArrayList<>();
         for(int i = 0; i < jsonArray.length(); i++){
             users.add(fromJSON(jsonArray.getJSONObject(i)));
+        }
+        return users;
+    }
+
+    public static List<User> fromJsonTweetArray(List<Tweet> tweetsFromNetwork) {
+        List<User> users = new ArrayList<>();
+        for (int i = 0; i < tweetsFromNetwork.size(); i++){
+            users.add(tweetsFromNetwork.get(i).user);
         }
         return users;
     }

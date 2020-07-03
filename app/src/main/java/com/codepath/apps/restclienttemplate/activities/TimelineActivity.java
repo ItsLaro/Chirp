@@ -10,6 +10,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.graphics.Movie;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
@@ -28,6 +29,9 @@ import com.codepath.apps.restclienttemplate.adapters.TweetsAdapter;
 import com.codepath.apps.restclienttemplate.databinding.ActivityTimelineBinding;
 import com.codepath.apps.restclienttemplate.fragments.ComposeFragment;
 import com.codepath.apps.restclienttemplate.models.Tweet;
+import com.codepath.apps.restclienttemplate.models.TweetDao;
+import com.codepath.apps.restclienttemplate.models.TweetWithUser;
+import com.codepath.apps.restclienttemplate.models.User;
 import com.codepath.apps.restclienttemplate.utilities.EndlessRecyclerViewScrollListener;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -53,6 +57,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
     private ActivityTimelineBinding binding;
 
     private TwitterClient client;
+    private TweetDao tweetDao;
     private TweetsAdapter tweetsAdapter;
     private EndlessRecyclerViewScrollListener scrollListener;
     private LinearLayoutManager layoutManager;
@@ -69,13 +74,17 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
 
         toolbar = binding.toolbar;
         setSupportActionBar(toolbar);
-        getSupportActionBar().setIcon(R.drawable.ic_twitter);
-
+        getSupportActionBar().setLogo(R.drawable.ic_twitter_logo_blue);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         Log.d(TAG, "Timeline Activity initiated!");
 
         //Client
         client = TwitterApp.getRestClient(this);
+
+        //Back-up DB
+        tweetDao = ((TwitterApp) getApplicationContext()).getMyDatabase().tweetDao();
+
 
         //Adapter
         TweetsAdapter.OnClickListener onClickListener = new TweetsAdapter.OnClickListener() {
@@ -101,7 +110,18 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
         binding.timelineRecycleView.setLayoutManager(layoutManager);
         binding.timelineRecycleView.setAdapter(tweetsAdapter);
 
-        showLoading();
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                showLoading();
+                Log.d(TAG, "Restoring last session from DB");
+                List<TweetWithUser> tweetWithUsers = tweetDao.getRecentItems();
+                List<Tweet> tweetsFromDB = TweetWithUser.getTweetList(tweetWithUsers);
+                tweetsAdapter.clear();
+                tweetsAdapter.addAll(tweetsFromDB);
+            }
+        });
+
         populateHomeTimeline(); //hides the indefinite loading bar on success
 
         //Swipe Refresh Listener
@@ -170,9 +190,25 @@ public class TimelineActivity extends AppCompatActivity implements ComposeFragme
                 Log.d(TAG, statusCode + ", Success: " + json.toString());
                 JSONArray jsonArray = json.jsonArray;
                 try {
+                    final List<Tweet> tweetsFromNetwork = Tweet.fromJSONArray(jsonArray);
                     tweetsAdapter.clear();
-                    tweetsAdapter.addAll(Tweet.fromJSONArray(jsonArray));
+                    tweetsAdapter.addAll(tweetsFromNetwork);
                     hideLoading();
+
+                    AsyncTask.execute(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            Log.d(TAG, "Storing data into DB");
+
+                            //Insert users
+                            List<User> usersFromNetwork = User.fromJsonTweetArray(tweetsFromNetwork);
+                            tweetDao.insertModel(usersFromNetwork.toArray(new User[0]));
+                            //Insert tweets
+                            tweetDao.insertModel(tweetsFromNetwork.toArray(new Tweet[0]));
+
+                        }
+                    });
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
