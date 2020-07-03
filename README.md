@@ -51,8 +51,20 @@ The following are things I was able to get done to improve the app functionality
 
 ## Video Walkthrough
 
-Here's a walkthrough of implemented user stories:
+Here's a walkthrough of required user stories:
 
+Here's the Oauth Login:
+<p align="center">
+  <img src="demo/Login.gif" width="1000">
+</p>
+Here's the home timeline:
+<p align="center">
+  <img src="demo/Required.gif" width="1000">
+</p>
+Here's a brief showcase of stretch and bonus stories:
+<p align="center">
+  <img src="demo/Stretch.gif" width="1000">
+</p>
 ## Notes
 
 Describe any challenges encountered while building the app.
@@ -64,7 +76,7 @@ Describe any challenges encountered while building the app.
 
 ## License
 
-    Copyright [yyyy] [name of copyright owner]
+    Copyright 2020 Ivan A. Reyes
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
