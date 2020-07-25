@@ -44,7 +44,7 @@ The following **additional** features are implemented:
 The following are things I was able to get done to improve the app functionality
 
 * [x] User profiles include tweet timelines, banner and more!
-* [x] Tweet action buttons are were made visible/interactable also from the list views (home or any profile)
+* [x] Tweet action buttons were made visible/interactable also from the list views (home or any profile)
 * [x] Compose tweet is initiated through a FAB (the FAB hides as one scrolls down)
 
 ## Video Walkthrough
